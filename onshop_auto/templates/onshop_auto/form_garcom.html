@@ -1,0 +1,36 @@
+{% extends "onshop_auto/garcons_auto.html" %}
+
+{% block 'area_form' %}
+<form role="form" method="post">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="{{ form.nome.id_for_label }}">Nome</label>
+                {{ form.nome }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="{{ form.usuario.id_for_label }}">Usuário</label>
+                {{ form.usuario }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="{{ form.senha.id_for_label }}">Senha</label>
+                {{ form.senha }}
+            </div>
+        </div>
+    </div>
+    {% csrf_token %}
+    <div class="row templatemo-form-buttons">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="reset" class="btn btn-default">Limpar</button>
+        </div>
+    </div>
+</form>
+{% endblock 'area_form' %}
+  

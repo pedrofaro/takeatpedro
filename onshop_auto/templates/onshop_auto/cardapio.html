@@ -1,0 +1,384 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Takeat">
+        <meta name="author" content="Takeat">
+        <title>Takeat</title>
+        <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+        <link href="{% static "onshop_auto/css/auto_estilo.css" %}" rel="stylesheet">
+    {% block stylesheet %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+    {% endblock stylesheet %}
+    {% block head_javascript %}
+    {% endblock head_javascript %}
+    </head>
+    {% block body_sistema %}
+    <body>
+    {% endblock body_sistema %}
+    {% block body %}
+    <div id="container">
+        <div id="header_auto">
+            <div class="cabecalho_auto">
+                <div class="content_cabecalho">
+                    <p class="est_nome">{{ estabelecimento.nome }}</p>
+                    <div class="divider"></div>
+                    <div class="divider"></div>
+                    <div class="divider"></div>
+                    <p class="mesa_icone"><img src="{% static "onshop_auto/images/mesa-icone.png" %}" /></p>
+                    <p class="header_mesa">Mesa {{ mesa }}</p>
+                    {% comment %}
+                    <div class="quantidade_auto">
+                    <a href="{% url 'onshop_auto:ver_carrinho' %}">
+                        <p>{{ quantidade }} </p>
+                        <p>&nbsp;( R$ {{ total }} )</p> 
+                    </a>
+                    {% endcomment %}
+                </div>
+                <div id="lista_categorias">
+                    <ul>
+                        {% for categoria in categorias %}
+                        <li {% if forloop.first %}class="selected"{% endif %}>{{ categoria }}</li>
+                        {% endfor %}    
+                    </ul>
+                </div>
+                <div class="borda_branca"></div>
+                </div>
+            </div>
+            {% comment %}
+            <div class="carrinho_tempo">
+                <h2><i class="far fa-clock"></i> 25min</h2>
+                <div class="quantidade_auto">
+                    <a href="{% url 'onshop_auto:ver_carrinho' %}">
+                        <p>{{ quantidade }} </p>
+                        <p>&nbsp;( R$ {{ total }} )</p> 
+                    </a>
+                </div>
+            </div>
+            {% endcomment %}
+        </div>
+        {% if estabelecimento.status == estabelecimento.FECHADO %}
+        <div class="msg_horario_funcionamento">
+            <p>Esse estabelecimento ainda não está aberto.</p><p>Aguarde um pouco mais para fazer o seu pedido!</p>
+        </div>
+        {% endif %}
+        <div class="content">
+            <div class="acordion_produtos_auto">
+                {% for categoria, produtos in lista %}
+                <div class="container_categoria container_categoria_auto" >
+                    <div class="cat_texto">
+                        <p class="categoria">{{ categoria.nome }}</p>
+                        {% comment %}<p class="desc_categoria">{{ categoria.descricao }}</p>{% endcomment %}
+                    </div>
+                    <div class="divider"></div>
+                    <div class="tempo_preparo"><i class="far fa-clock"></i> {{ categoria.tempo_preparo }}</div>
+                </div>
+                <div class="produtos">
+                    {% for produto in produtos %}
+                    <div class="container_produto">
+                        {% if produto.esgotado %}{# esgotado 1 SIM 0 NAO #}
+                        <a href="#">
+                            <img class="img_produto lessOpacity img_produto_auto" src="{% if produto.thumbnail %}{{ produto.thumbnail.url }}?{% now 'YHiu' %}{% endif %}" />
+                        {% else %}
+                        <a href="#" class="link-produto" js-produto-id="{{ produto.id }}">
+                            <img class="img_produto img_produto_auto" src="{% if produto.thumbnail %}{{ produto.thumbnail.url }}?{% now 'YHiu' %}{% endif %}" />
+                        {% endif %}
+                            <div class="descricao">
+                                <p class="nome_produto nome_produto_auto">{{ produto.nome }}</p>
+                                <p class="desc_produto desc_produto_auto">{{ produto.descricao|truncatechars:80 }}</p>
+                                {% comment %}
+                                {% if produto.atributos %}
+                                <ul class="atributos_produto">
+                                    {% for atributo in produto.atributos.all %}
+                                    <li>{% if atributo.icone.url %}<img title="{{ atributo }}" src="{{ atributo.icone.url }}?{% now 'YHiu' %}"/ >{% endif %}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                                {% endcomment %}
+                            </div>
+                            <div class="preco_atributo">
+                                {% if produto.preco_promocao %}
+                                     <p class="preco preco_auto preco_promocao"><span style="text-decoration: line-through;">R$ {{ produto.preco }}</span></p> 
+                                     <p class="preco preco_auto">R$ {{ produto.preco_promocao }}</p>
+                                {% else %}
+                                    <p class="preco preco_auto">R$ {{ produto.preco }}</p>
+                                {% endif %}
+                                {% if produto.atributos.all %}
+                                    <div id="atributo_produto_auto">
+                                        {% for atributo in produto.atributos.all %}
+                                            {% if forloop.first %}
+                                            <ul>
+                                                <li class="selected">{{ atributo }}</li>
+                                            </ul>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                </div>
+            </div><!-- Fim de acordion_produtos -->
+        </div>
+        <div id="footer_auto">
+            <div id="container_compra_auto" class="botoes_autoatendimento">
+                {% if garcom %}
+                <div class="btn_ajuda">
+                    <a class="" js-comanda-id="{{ comanda }}" href="{% url 'onshop_auto:atendimento_mesas' garcom.id token %}"><img src="{% static "onshop_auto/images/conta-icone.png" %}" />Voltar</a>
+                </div>
+                {% else %}
+                <div class="btn_ajuda">
+                    <a class="botao_help" js-comanda-id="{{ comanda }}" href="#"><img src="{% static "onshop_auto/images/ajuda-icone.png" %}" />Ajuda</a>
+                </div>
+                {% endif %}
+                <div class="btn_fazer_pedido">
+                    <a class="botao_carrinho" js-comanda-id="{{ comanda }}" id="btn_analisa_pedido" href="#">
+                        <div class="bck_pedir">
+                            <img src="{% static "onshop_auto/images/carrinho-icone.png" %}" />
+                        </div>
+                        <div class="wd_pedir">Pedir</div>
+                    </a>
+                    {% if quantidade > 0 %}
+                    <div class="qtde_compras"><p>{{ quantidade }}</p></div>
+                    {% else %}
+                    <div class="qtde_compras" style="display: none"><p>{{ quantidade }}</p></div>
+                    {% endif %}
+                </div>
+                {% if token %}
+                <div class="btn_conta">
+                
+                </div>
+                {% else %}
+                <div class="btn_conta">
+                    <a class="botao_conta" js-comanda-id="{{ comanda }}" href="#"><img src="{% static "onshop_auto/images/conta-icone.png" %}" />Conta</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div><!-- Fim de Container -->
+    <div class="modal_simples">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-produto">
+            </div>
+        </div>
+    </div>
+    <div class="modal_help">
+        <div class="help-content">
+            <span class="close_help">&times;</span>
+            <div class="modal-ajuda">
+            </div>
+        </div>
+    </div>
+    {% endblock body %}
+    <script
+              src="https://code.jquery.com/jquery-3.3.1.min.js"
+              integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+              crossorigin="anonymous"></script>
+    {% block javascript_base %}
+    {% endblock javascript_base %}
+    {% block tail_javascript %}
+    <script>
+        var acc = document.getElementsByClassName("container_categoria_auto");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+          var accordion = acc[i]
+          var produto = accordion.nextElementSibling;
+          accordion.classList.add("active");
+          produto.style.maxHeight = produto.scrollHeight + "px";
+
+          acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var produtos = this.nextElementSibling;
+            //console.log(this.nextElementSibling)
+            if (produtos.style.maxHeight){
+                produtos.style.maxHeight = null;
+            } else {
+                produtos.style.maxHeight = produtos.scrollHeight + "px";
+            }
+          });
+        };
+        function AbrirCarrinho(){
+            var id = $('.botao_carrinho').attr("js-comanda-id");
+            $('.modal_help').css("display", "block");
+            $('.help-content').removeClass("back_vermelho");
+            $('.help-content').addClass("back_verde");
+            $('.help-content').addClass("back_carrinho");
+
+            //console.log(id);
+            $.ajax({
+                url: '{% url 'onshop_auto:formulario_carrinho' %}',
+                type: "get",
+                data: {
+                    'token': '{{ token }}',
+                    'id_garcom': '{{ id_garcom }}',//Pode pegar como garcom, pois vem como None
+                    'id': id,
+                    'key': '{{ request.session.session_key  }}',
+                },
+                success: function(data){
+                    //console.log(data);
+                    $('.help-content').find('.modal-ajuda').html(data.product_snippet);
+                },
+                error: function(err){
+                    console.log('error', err);
+                }
+            })
+        };
+        // Get the modal
+        $(document).ready(function(){
+            $('.link-produto').on('click', function(event) {
+                event.preventDefault();
+                //console.log('funfando');
+                $('.modal_simples').css("display", "block");
+                //Aqui entra o AJAX
+                var _this = $(this);
+                var id = _this.attr("js-produto-id");
+                //console.log(id)
+                $.ajax({
+                    url: '{% url 'onshop_auto:ver_produto' %}',
+                    type: "get",
+                    data: {'id': id},
+                    success: function(data){
+                        //console.log(data);
+                        $('.modal-content').find('.modal-produto').html(data.product_snippet);
+                    },
+                    error: function(err){
+                        console.log('error', err);
+                    }
+                })
+            });
+            $('#btn_analisa_pedido').on('click', function(event){
+                //Função que avalia se é possível dar prosseguimento ao pedido 
+                //caso tenha pedido mínimo e se a loja está aberta
+                event.preventDefault();
+                $.ajax({
+                    url: '{% url 'onshop_auto:analisa_pedido_auto' %}',
+                    success: function(data){
+                       //window.location.href = data.product_snippet;
+                       AbrirCarrinho();
+                    },
+                    error: function(err){
+                        alert(err.responseJSON.product_snippet);
+                    }
+                })
+            });
+            $('.botao_help').on('click', function(event) {
+                event.preventDefault();
+                //console.log('funfando');
+                $('.modal_help').css("display", "block");
+                $('.help-content').removeClass("back_vermelho");
+                $('.help-content').addClass("back_verde");
+                //Aqui entra o AJAX
+                var _this = $(this);
+                var id = _this.attr("js-comanda-id");
+                console.log(id);
+                $.ajax({
+                    url: '{% url 'onshop_auto:formulario_ajuda' %}',
+                    type: "get",
+                    data: {'id': id},
+                    success: function(data){
+                        //console.log(data);
+                        $('.help-content').find('.modal-ajuda').html(data.product_snippet);
+                    },
+                    error: function(err){
+                        console.log('error', err);
+                    }
+                })
+            });
+            $('.botao_conta').on('click', function(event) {
+                event.preventDefault();
+                //console.log('funfando');
+                $('.modal_help').css("display", "block");
+                $('.help-content').removeClass("back_verde");
+                $('.help-content').addClass("back_vermelho");
+                //Aqui entra o AJAX
+                var _this = $(this);
+                var id = _this.attr("js-comanda-id");
+                //console.log(id)
+                $.ajax({
+                    url: '{% url 'onshop_auto:ver_parcial' %}',
+                    type: "get",
+                    data: {'id': id},
+                    success: function(data){
+                        //console.log(data);
+                        $('.help-content').find('.modal-ajuda').html(data.product_snippet);
+                    },
+                    error: function(err){
+                        console.log('error', err);
+                    }
+                })
+            });
+
+            
+            $('.close_help').each( function(i,e){
+                $(this).click( function(event){
+                    $('.modal-ajuda').html("");
+                    $('.modal_help').css('display', 'none');
+                });
+            });
+        });
+        /*
+        var links = document.getElementsByClassName("link-produto");
+        var mat;
+
+        for (mat = 0; mat < links.length; mat++) {
+            //console.log("foi");
+            links[mat].addEventListener("click", function() {
+                modal.style.display = "block";
+
+          });
+        }*/
+
+        // Get the button that opens the modal
+        /*var btn = document.getElementsByClassName("link-produto")[0];*/
+
+        var modal = document.getElementsByClassName("modal_simples")[0];
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        var modal_produto = document.getElementsByClassName("modal-produto")[0];
+        // When the user clicks on the button, open the modal
+        /*btn.onclick = function() {
+          modal.style.display = "block";
+        } */
+        // console.log(modal_produto);
+        Element.prototype.remove = function(){
+            this.parentElement.removeChild(this);
+        }
+        NodeList.prototype.remove = HTMLCollection.prototype.remove = function(){
+            for(var i = this.length - 1; i >= 0; i--){
+                if(this[i] && this[i].parentElement){
+                    this[i].parentElement.removeChild(this[i]);
+                }
+            }
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+          modal_produto.innerHTML = "";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+            modal_produto.innerHTML = "";
+          }
+        } 
+
+    </script>
+
+    {% endblock tail_javascript %}
+    {% block analytics %}
+    {% endblock analytics %}
+    </body>
+</html>

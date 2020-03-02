@@ -1,0 +1,64 @@
+{% load bootstrap4 %}
+<HTML>
+<HEAD>
+    <TITLE>Produtos</TITLE>
+    {% bootstrap_css %}
+</HEAD>
+
+<BODY>
+
+    <h2>Produtos</h2>
+    {%bootstrap_messages%}
+    <a href="#modal-mesas" data-toggle="modal">Adicionar mesa</a>
+
+    <div class="modal fade bd-example-modal-lg show" id="modal-mesas" role="dialog">
+        <div class="modal-dialog" role="documet">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar mesa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class = 'container'>
+                        <form action="{% url 'onshop_core:p_produtos' %}" method="post" class="form" autocomplete="off">
+                            {%csrf_token%}
+
+                            {%bootstrap_form form%}
+                            {%buttons%}
+                                <button type="submit" class="btn btn-primary">Adicionar mesa</button>
+                            {%endbuttons%}
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table container clearfix col-md-6 configdiv">
+        <thead>
+            <tr>
+                <th scope="col">Id do produto</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Preço</th>
+                <th scope="col">Id do Restaurante</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos %}
+                <tr>
+                    <td scope="row">{{produto.id_prod}}</td>
+                    <td scope="row">{{produto.nome}}</td>
+                    <td scope="row">{{produto.preco}}</td>
+                    <td scope="row">{{produto.id_restaurante}}</td>
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+{% bootstrap_javascript jquery='full' %}
+</BODY>
+</HTML>

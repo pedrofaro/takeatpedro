@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Takeat">
+    <meta name="author" content="Jonnpo">
+    <title>Takeat</title>
+    <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+    {% block stylesheet %}
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+              integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+              crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+              crossorigin="anonymous">
+    {% endblock stylesheet %}
+    {% block head_javascript %}
+    {% endblock head_javascript %}
+</head>
+{% block body_sistema %}
+    <body>
+{% endblock body_sistema %}
+{% block body %}
+    <div id="container">
+         <div id="header">
+            <ul class="header_fluxo_pedido" style="padding: 0 16px;">
+                <li>Atendimento</li>
+            </ul>
+        </div>
+        <div class="content" style="padding-top: 40px;">
+            <form method="post" style="padding: 32px 16px;">
+                {% csrf_token %}
+                <div style="display: flex; justify-content: center; font-size: 14px; color: red; margin-bottom: 16px;">
+                    {{ login_error }}
+                </div>
+                <div class="form-group">
+                    <label for="usuario">Usuário</label>
+                    {{ form.usuario }}
+                    {{ form.usuario.errors }}
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    {{ form.senha }}
+                    {{ form.senha.errors }}
+                </div>
+                <input type="submit" id="submit-form" class="hidden btn btn-dark" value="Entrar"/>
+            </form>
+        </div>
+    </div>
+    <!-- Fim de Container -->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+{% endblock body %}
+{% block javascript_base %}
+{% endblock javascript_base %}
+{% block tail_javascript %}
+{% endblock tail_javascript %}
+{% block analytics %}
+{% endblock analytics %}
+</body>
+</html>

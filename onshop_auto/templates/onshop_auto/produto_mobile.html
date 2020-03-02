@@ -1,0 +1,114 @@
+{% load static %}
+
+            {% if atributo %}
+            <p class="atributos_produto_mobile">
+                {{ atributo }}
+            </p>
+            {% endif %}
+            <img src="{{ produto.imagem.url }}" />
+            <h1>{{ produto.nome }}</h1>
+            <p class="preco_modal_simples">
+                {% if produto.preco_promocao %}
+                                 R$ {{ produto.preco_promocao }} <span style="font-size: 12px;text-decoration: line-through;">R$ {{ produto.preco }}</span> 
+                                {% else %}
+                                    R$ {{ produto.preco }}
+                                {% endif %}
+            </p>
+            <p class="modal_descricao">{{ produto.descricao }}</p>
+            <form class="cardapio_produto">
+            <input class="produtoid" type="hidden" value="{{ produto.id }}" />
+            {% for field in form %}
+                {% if field.field.widget.attrs.recorrente %}
+                    {% if field.field.widget.attrs.resposta %}
+                    <div class="modal_select">{{ field.label}} {{ field }}</div>
+                    {% else %}
+                    <p class="modal_headline">{{ field.label  }} ?</p>
+                    {% endif %}
+                {% else %}
+                    <p class="modal_headline">{{ field.label  }} ?</p>    
+                        {{ field }}
+                {% endif %}
+                
+            {% endfor %}
+            <p class="modal_headline">Pedido Especial?</p>
+            <input type="text" name="especial">
+            <div class="modal_simples_rodape">
+                <p>Quantidade</p>
+                <div class="number-style-qty">
+                    <span class="number-minus fnc-menos"></span>
+                    <input class="quantity" min="0" name="quantity" value="1" step="1" type="number">
+                    <span class="number-plus fnc-mais"></span>
+                </div>
+            </div>
+
+            <label class="btn_adicionar" for="submit-form" tabindex="0">+ Adicionar ao Meu Pedido</label>
+            <input type="submit" id="submit-form" class="hidden" />
+            </form>
+            <link rel="stylesheet" href="{% static "onshop_core/css/number.css" %}">
+            <script src="{% static "onshop_core/js/number3.js" %}"></script>
+            <script>
+                $(".modal_select input[type='number']").keypress(function(evt){
+                    evt.preventDefault();
+                })
+                $(".modal_select input[type='number']").each(function () {
+                    $(this).number();
+                });
+                $(".modal_select input[type='number']").each(function () {
+                    var max = $(this).attr('js-group');
+                });
+                $('.fnc-menos').on("click", function(){
+                    var input = $('.quantity').parent().find('input');
+                    var valor = parseInt(input.val(), 10);
+                    var novo = valor-parseInt(1, 10)
+                    if (novo <= 0){
+                        input.val(valor);
+                    }else{
+                        input.val(valor-parseInt(1, 10));    
+                    };
+                });
+                $('.fnc-mais').on("click", function(){
+                    var input = $('.quantity').parent().find('input');
+                    var valor = parseInt(input.val(), 10);
+                    input.val(valor+parseInt(1, 10));
+                });
+                $('.cardapio_produto').submit(function(event) {
+                    event.preventDefault();
+                    //console.log('funfando');
+                    //Aqui entra o AJAX
+                    //var _this = $(this);
+                    //var id = _this.attr("js-produto-id");
+                    //var csrfmiddlewaretoken = $("[name=csrfmiddlewaretoken]").val();
+                    //console.log(csrfmiddlewaretoken);
+                    //console.log(id)
+                    var id = $('.produtoid').val();
+                    var formData = $('.cardapio_produto').serializeArray();
+                    formData = JSON.stringify(formData);
+                    //len = formData.length;
+                    //dataObj = {};
+                    //for(i=0; i<len; i++){
+                    //    dataObj[formData[i].name] = formData[i].value;
+                    //};
+                    $.ajax({
+                        url: '{% url 'onshop_auto:adicionar_pedido' %}',
+                        type: "get",
+                        datatype: "json",
+                        data: {
+                            'id': id,
+                            'formData': formData,
+                            'key': '{{ key }}'
+                        },
+                        success: function(data){
+                            $('.modal_simples').css("display", "none");
+                            $('.modal-produto').html("");
+                            //console.log(data);
+                            $('.qtde_compras').removeAttr("style");
+                            $('.qtde_compras').html('<p>'+data['quantidade']+'</p>');
+                            //console.log(data['produto']);
+                        },
+                        error: function(err){
+                            console.log('error', err);
+                        }
+                    })
+                });
+
+            </script>

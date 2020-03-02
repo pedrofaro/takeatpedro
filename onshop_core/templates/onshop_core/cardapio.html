@@ -1,0 +1,234 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="OnShop">
+        <meta name="author" content="OnShop">
+        <title>OnShop</title>
+        <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+    {% block stylesheet %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+    {% endblock stylesheet %}
+    {% block head_javascript %}
+    {% endblock head_javascript %}
+    </head>
+    {% block body_sistema %}
+    <body>
+    {% endblock body_sistema %}
+    {% block body %}
+    <div id="container">
+        <div id="header">
+            <h1>{{ estabelecimento.nome }}</h1>
+        </div>
+        {% if estabelecimento.status == estabelecimento.FECHADO %}
+        <div class="msg_horario_funcionamento">
+            <p>Esse estabelecimento ainda não está aberto.</p><p>Aguarde um pouco mais para fazer o seu pedido!</p>
+        </div>
+        {% endif %}
+        <div class="content">
+            <div class="acordion_produtos">
+                {% for categoria, produtos in lista %}
+                <div class="container_categoria" >
+                    <div class="cat_texto">
+                        <p class="categoria">{{ categoria.nome }}</p>
+                        <p class="desc_categoria">{{ categoria.descricao }}</p>
+                    </div>
+                </div>
+                <div class="produtos">
+                    {% for produto in produtos %}
+                    <div class="container_produto">
+                        {% if produto.esgotado %}{# esgotado 1 SIM 0 NAO #}
+                        <a href="#">
+                            <img class="img_produto lessOpacity" src="{% if produto.thumbnail %}{{ produto.thumbnail.url }}?{% now 'YHiu' %}{% endif %}" />
+                        {% else %}
+                        <a href="#" class="link-produto" js-produto-id="{{ produto.id }}">
+                            <img class="img_produto" src="{% if produto.thumbnail %}{{ produto.thumbnail.url }}?{% now 'YHiu' %}{% endif %}" />
+                        {% endif %}
+                            <div class="descricao">
+                                <p class="nome_produto">{{ produto.nome }}</p>
+                                <p class="desc_produto">{{ produto.descricao|truncatechars:80 }}</p>
+                                {% if produto.atributos %}
+                                <ul class="atributos_produto">
+                                    {% for atributo in produto.atributos.all %}
+                                    <li>{% if atributo.icone.url %}<img title="{{ atributo }}" src="{{ atributo.icone.url }}?{% now 'YHiu' %}"/ >{% endif %}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                            <p class="preco">
+                                {% if produto.preco_promocao %}
+                                 <span style="text-decoration: line-through;">R$ {{ produto.preco }}</span><br/> R$ {{ produto.preco_promocao }}
+                                {% else %}
+                                    R$ {{ produto.preco }}
+                                {% endif %}
+                            </p>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                </div>
+            </div><!-- Fim de acordion_produtos -->
+        </div>
+        <div id="footer">
+            <div id="container_compra">
+                <div class="quantidade">
+                    <a href="{% url 'onshop_core:ver_carrinho' %}">
+                        <p>{{ quantidade }} </p>
+                        <p>&nbsp;( R$ {{ total }} )</p> 
+                    </a>
+                </div>
+                <div class="botao_fechar_pedido">
+                    <a id="btn_analisa_pedido" href="#">Fazer Pedido</a>
+                    {% comment %}
+                    {% if estabelecimento.status == estabelecimento.FECHADO %}
+                    <a href="">Fazer Pedido</a>
+                    {% elif total and estabelecimento.pedido_minimo > total %}                    
+                        <a onclick="alert('Pedido Mínimo de R$ {{ estabelecimento.pedido_minimo }}')">Fazer Pedido</a>
+                    {% else %}
+                        <a href="{% url "onshop_core:entregaretirada" %}">Fazer Pedido</a>
+                    {% endif %}
+                    {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div><!-- Fim de Container -->
+    <div class="modal_simples">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-produto">
+            </div>
+        </div>
+    </div>
+    {% endblock body %}
+    <script
+              src="https://code.jquery.com/jquery-3.3.1.min.js"
+              integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+              crossorigin="anonymous"></script>
+    {% block javascript_base %}
+    {% endblock javascript_base %}
+    {% block tail_javascript %}
+    <script>
+        var acc = document.getElementsByClassName("container_categoria");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+          var accordion = acc[i]
+          var produto = accordion.nextElementSibling;
+          accordion.classList.add("active");
+          produto.style.maxHeight = produto.scrollHeight + "px";
+
+          acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var produtos = this.nextElementSibling;
+            //console.log(this.nextElementSibling)
+            if (produtos.style.maxHeight){
+                produtos.style.maxHeight = null;
+            } else {
+                produtos.style.maxHeight = produtos.scrollHeight + "px";
+            }
+          });
+        }
+        // Get the modal
+        $(document).ready(function(){
+            $('.link-produto').on('click', function(event) {
+                event.preventDefault();
+                //console.log('funfando');
+                $('.modal_simples').css("display", "block");
+                //Aqui entra o AJAX
+                var _this = $(this);
+                var id = _this.attr("js-produto-id");
+                //console.log(id)
+                $.ajax({
+                    url: '{% url 'onshop_core:ver_produto' %}',
+                    type: "get",
+                    data: {'id': id},
+                    success: function(data){
+                        //console.log(data);
+                        $('.modal-content').find('.modal-produto').html(data.product_snippet);
+                    },
+                    error: function(err){
+                        console.log('error', err);
+                    }
+                })
+            });
+            $('#btn_analisa_pedido').on('click', function(event) {
+                //Função que avalia se é possível dar prosseguimento ao pedido 
+                //caso tenha pedido mínimo e se a loja está aberta
+                event.preventDefault();
+                //console.log('funfando');
+                $.ajax({
+                    url: '{% url 'onshop_core:analisa_pedido' %}',
+                    type: "get",
+                    //data: {'data': 'blau'}, //Apenas por sintaxe mesmo
+                    success: function(data){
+                        //console.log(data);
+                        window.location.href = data.product_snippet;
+                    },
+                    error: function(err){
+                        alert(err.responseJSON.product_snippet);
+                    }
+                })
+            });
+
+        });
+        /*
+        var links = document.getElementsByClassName("link-produto");
+        var mat;
+
+        for (mat = 0; mat < links.length; mat++) {
+            //console.log("foi");
+            links[mat].addEventListener("click", function() {
+                modal.style.display = "block";
+
+          });
+        }*/
+
+        // Get the button that opens the modal
+        /*var btn = document.getElementsByClassName("link-produto")[0];*/
+
+        var modal = document.getElementsByClassName("modal_simples")[0];
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        var modal_produto = document.getElementsByClassName("modal-produto")[0];
+        // When the user clicks on the button, open the modal
+        /*btn.onclick = function() {
+          modal.style.display = "block";
+        } */
+        // console.log(modal_produto);
+        Element.prototype.remove = function(){
+            this.parentElement.removeChild(this);
+        }
+        NodeList.prototype.remove = HTMLCollection.prototype.remove = function(){
+            for(var i = this.length - 1; i >= 0; i--){
+                if(this[i] && this[i].parentElement){
+                    this[i].parentElement.removeChild(this[i]);
+                }
+            }
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+          modal_produto.innerHTML = "";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+            modal_produto.innerHTML = "";
+          }
+        }
+    </script>
+
+    {% endblock tail_javascript %}
+    {% block analytics %}
+    {% endblock analytics %}
+    </body>
+</html>

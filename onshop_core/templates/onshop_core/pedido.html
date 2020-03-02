@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt_br">
+  <head>
+    <title>OnShop - Sistema Online de Pedidos</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Agência Jonnpo" />
+    <style>
+      @page{
+        size: a6 portrait;
+        margin: 5mm 1mm;
+      }
+      body{
+        background: #fff;
+      }
+      .imagem-termo{
+          display: block;
+      }
+      .imagem-termo, .endereco-termo{
+          text-align: center;
+        }
+      /*h1{
+        font-size: 16px;
+        padding: 10px 0;
+        text-align: center;
+      }*/
+      p{
+          font-size: 14px;
+          margin: 1px;
+      }
+      /*#bordas-termo{
+          margin-top: 5px;
+          border: 1px solid #000;
+      }*/
+      .endereco-termo p{
+          font-size: 12px;
+          font-weight: bold;
+      }
+    </style>
+
+<body>
+    <h1 style="font-size: 20px; margin: 0; text-align: center;">Pedido #{{ pedido.id }} - {{ estabelecimento }}</h1>
+    <p style="font-size:18px;">Cliente: {{ pedido.comprador.nome }} {{ pedido.comprador.sobrenome }} - {{ pedido.comprador.telefone }}</p>
+    <table border="0" style="margin: 1px 0 0 3px" />
+    <th>
+      <tr style="font-size: 16px; border-bottom: 1px black dashed">
+        <td colspan="10">Descrição</td>
+        <td align="center" colspan="2">Total</td>
+      </tr>
+    </th>
+    {% for produto in pedido.produtos.all %}
+    <tr style="font-size: 20px;padding: 5px 0;">
+      <td style="font-size: 22px;" colspan="9">(#{{ pedido.id }} - {{ forloop.counter }}/{{ pedido.produtos.all.count }}) <br/>{{ produto.quantidade }}x {{ produto.produto }}</td>
+      <td colspan="3" align="right">R$ {{ produto.total }}</td>
+    </tr>
+    <tr>
+      <td colspan="10" style="font-size: 18px;">{{ produto.complemento|safe }}</td>
+      <td></td>
+    </tr>
+    {% endfor %}
+    </table>    
+    <hr style="margin: 5px 0 0 20px" />
+    <h1 style="font-size: 20px; text-align: right">Total: R$ {{ pedido.total }}</h1>
+    {% if pedido.opcao_pagamento.troco %}
+    <p style="font-size: 18px;"><strong>Obs: troco para </strong> {{ pedido.opcao_pagamento.troco }}</p>
+    {% endif %}
+  </div>
+  <!-- <p style="font-size: 10px; padding-top: 5px">Descrição&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Qtde&nbsp;&nbsp;&nbsp;     V.Unit.&nbsp;&nbsp;&nbsp;Total</p>
+    <hr style="margin: 1px 0 0 3px" />
+    <p style="margin-top: 5px; font-size: 10px;">Milk Shake&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 x 8,90 &nbsp;&nbsp;&nbsp;&nbsp; 17,80</p>
+    <p style="font-size: 8px;">Complementos: Chocolate.</p>
+    <p style="margin-top: 5px; font-size: 10px;">Açaí Médio&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 x 12,80 &nbsp;&nbsp;&nbsp;&nbsp; 12,80</p>
+    <p style="font-size: 8px;">Complementos: Granola. Leite Condensado. Ninho. Ninho. Calda de Chocolate.</p>
+    <p style="margin-top: 5px; font-size: 10px;">Pizza Quatro Q.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 x 23,90 &nbsp;&nbsp;&nbsp;&nbsp; 23,90</p>
+    <p style="font-size: 8px;">Complementos: Meia Calabresa, Meia Palmito.</p>
+    <p style="margin-top: 5px; font-size: 10px;">Combo Burger.<span style="font-size: 8px; text-align: right">1 x 43,90</span></p>
+    <p style="font-size: 8px;">Complementos: Hamburguer Simples. Carne Bem Passada. Sem Cebolas. Batata Frita, Refrigerante Coca-Cola.</p> -->
+    <script type="text/javascript">
+      window.onload = function(){ window.print(); };
+    </script>
+</body>
+</html>

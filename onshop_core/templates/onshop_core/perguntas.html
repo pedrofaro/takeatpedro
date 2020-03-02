@@ -1,0 +1,42 @@
+{% extends "onshop_core/complementos.html" %}
+
+
+          
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-12">
+            <form role="form" id="templatemo-preferences-form" method="post" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-12 margin-bottom-15">
+                  <label for="{{ form.pergunta.id_for_label }}" class="control-label">Pergunta</label>
+                  {{ form.pergunta }}
+                  {{ form.pergunta.errors }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 margin-bottom-15">
+                  <label for="{{ form.tipo.id_for_label }}" class="control-label">Tipo</label>
+                  {{ form.tipo }}
+                  {{ form.tipo.errors }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 margin-bottom-15">
+                  <label for="{{ form.limite.id_for_label }}" class="control-label">Limite</label>
+                  {{ form.limite }}
+                  {{ form.limite.errors }}
+                </div>
+              </div>
+              {% csrf_token %}
+              <div class="row templatemo-form-buttons">
+                <div class="col-md-12">
+                  <button type="submit" class="btn btn-primary">Salvar</button>
+                  <button type="reset" class="btn btn-default">Limpar</button>
+                </div>
+              </div>
+            </form>
+            {{ form.error }}
+          </div>
+        </div>
+          {% endblock 'area_form' %}
+  

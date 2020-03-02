@@ -1,0 +1,204 @@
+{% extends "onshop_auto/novos_pedidos_auto.html" %}
+{% load static %}
+
+{% block style %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static "onshop_auto/css/star-rating-svg.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "onshop_auto/css/admin-auto.css" %}">
+{% endblock style %}
+
+            {% block menu_painel_pedidos %}
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_auto:novos_pedidos_auto' %}">Novos Pedidos ({{ qtde_novos_pedidos }})</a></li>
+              <li><a href="{% url 'onshop_auto:pedidos_andamento' %}">Em Andamento ({{ qtde_pedidos_andamento }})</a></li>
+              <li><a href="{% url 'onshop_auto:pedidos_finalizados' %}">Entregues ({{ qtde_pedidos_finalizados}}) </a></li>
+              <li><a href="{% url 'onshop_auto:ver_mensagens' %}">Mensagens ({{ qtde_mensagens }}) </a></li>
+              <li><a href="{% url 'onshop_auto:ver_avaliacoes' %}">Avaliações</a></li>
+              {% comment %}<li><a href="{% url 'onshop_auto:ver_comandas' %}">Comandas</a></li>{% endcomment %}
+              {% comment %}<li><a href="{% url 'onshop_core:relatorio' %}">Relatórios</a></li>{% endcomment %}
+            </ul>
+            {% endblock menu_painel_pedidos %}
+
+      {% block content_admin %}
+          <h1>Avaliações Autoatendimento</h1>
+          <p class="margin-bottom-15">Edite abaixo as categorias que deseja avaliar:</p>
+          <div class="row">
+            <div class="col-md-6">
+              <form method="post" role="form" id="templatemo-preferences-form">
+                {% csrf_token %}
+                <div class="row">
+                  <div class="col-md-12 margin-bottom-15">
+                    <label id="{{ form.nome_primeiro_campo.id_for_label }}" class="control-label">Categoria 1</label>
+                    {{ form.nome_primeiro_campo }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 margin-bottom-15">
+                    <label id="{{ form.nome_segundo_campo.id_for_label }}" class="control-label">Categoria 2</label>
+                    {{ form.nome_segundo_campo }}
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12 margin-bottom-15">
+                    <label id="{{ form.nome_terceiro_campo.id_for_label }}" class="control-label">Categoria 3</label>
+                    {{ form.nome_terceiro_campo }}
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12 margin-bottom-15">
+                    <label id="{{ form.nome_quarto_campo.id_for_label }}" class="control-label">Categoria 4</label>
+                    {{ form.nome_quarto_campo }}
+                  </div>
+                </div>
+                <div class="row templatemo-form-buttons">
+                  <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="reset" class="btn btn-default">Cancelar</button>    
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-6 medias-notas">
+              <p>Nota média das categorias:</p>
+              <ul id="avaliacoes_admin">
+                <li>1)
+                  <div class="estrelas">
+                    <div class="my-rating"></div>
+                    <p>(<span class="media">3.3</span>)</p>
+                  </div>
+                </li>
+                <li>2)
+                  <div class="estrelas">
+                    <div class="my-rating"></div>
+                    <p>(<span class="media">4.2</span>)</p>
+                  </div>
+                </li>
+                <li>3)
+                  <div class="estrelas">
+                    <div class="my-rating"></div>
+                    <p>(<span class="media">2.8</span>)</p>
+                  </div>
+                </li>
+                <li>4)
+                  <div class="estrelas">
+                    <div class="my-rating"></div>
+                    <p>(<span class="media">4.8</span>)</p>
+                  </div> 
+
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="btn-group pull-right" id="templatemo_sort_btn">
+                <button type="button" class="btn btn-default">Ordenar por</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Nome</a></li>
+                  <li><a href="#">Descrição</a></li>
+                </ul>
+              </div>
+              <div class="table-responsive">
+                <h4 class="margin-bottom-15">Avaliações mais recentes</h4>
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Avaliação</th>
+                      <th>Mensagem</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for avaliacao in avaliacoes %}
+                    <tr class="{% cycle '' 'success' %}">
+                      <td>{{ avaliacao.hora_criacao|date:'H:i - d/m' }}</td>
+                      <td>
+                        <ul class="respostas_avaliacoes">
+                          <li>
+                            <div class="estrelas">
+                              {{ q_avaliado.nome_primeiro_campo }}
+                              <div class="mine-rating"></div>
+                              <p>(<span class="media">{{ avaliacao.nota_primeiro_campo }}</span>)</p>
+                            </div>
+                          </li>
+                          <li><div class="estrelas">
+                              {{ q_avaliado.nome_segundo_campo }}
+                              <div class="mine-rating"></div>
+                              <p>(<span class="media">{{ avaliacao.nota_segundo_campo }}</span>)</p>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="estrelas">
+                              {{ q_avaliado.nome_terceiro_campo }}
+                              <div class="mine-rating"></div>
+                              <p>(<span class="media">{{ avaliacao.nota_terceiro_campo }}</span>)</p>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="estrelas">
+                              {{ q_avaliado.nome_quarto_campo }}
+                              <div class="mine-rating"></div>
+                              <p>(<span class="media">{{ avaliacao.nota_quarto_campo }}</span>)</p>
+                            </div>
+                          </li>
+                        </ul>
+                      </td>
+                      <td>{{ avaliacao.mensagem }}</td>                    
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+          </div>
+        </div>
+{% endblock content_admin %}
+
+{% block js_footer %}
+      <script type="text/javascript">
+        $(document).ready(function(){
+          $(".my-rating").each(function(index){
+            var media = $(this).parent().find('.media').text();
+            console.log(media);
+            $(this).starRating({
+              initialRating: media,
+              readOnly: true,
+              ratedColor: 'gold',
+              starSize: 30,  
+            /*
+            useFullStars: false,
+            starSize: 40,
+            disableAfterRate: false,
+            onHover : function(currentIndex, currentRating, $el){
+              $('.live-rating').text(currentIndex);
+            }*/
+            });
+          });
+          $(".mine-rating").each(function(index){
+            var media = $(this).parent().find('.media').text();
+            console.log(media);
+            $(this).starRating({
+              initialRating: media,
+              readOnly: true,
+              ratedColor: 'gold',
+              starSize: 20,  
+            /*
+            useFullStars: false,
+            starSize: 40,
+            disableAfterRate: false,
+            onHover : function(currentIndex, currentRating, $el){
+              $('.live-rating').text(currentIndex);
+            }*/
+            });
+          });
+        });
+      </script>
+      <script src="{% static "onshop_auto/js/jquery.star-rating-svg.js" %}"></script>
+{% endblock js_footer %}
+  

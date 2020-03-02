@@ -1,0 +1,254 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Takeat">
+        <meta name="author" content="Takeat">
+        <title>Takeat</title>
+        <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+        <link href="{% static "onshop_auto/css/auto_estilo.css" %}" rel="stylesheet">
+
+    {% block stylesheet %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static "onshop_auto/css/star-rating-svg.css" %}">
+    {% endblock stylesheet %}
+    
+    {% block head_javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+
+    {% endblock head_javascript %}
+
+    </head>
+    {% block body_sistema %}
+    <body>
+    {% endblock body_sistema %}
+    {% block body %}
+    <div id="container">
+        <div id="header_auto_maior">
+            <div class="cabecalho_auto">
+                <div class="content_cabecalho">
+                    <p class="est_nome">{{ estabelecimento.nome }}</p>
+                    <div class="divider"></div>
+                    <div class="divider"></div>
+                    <div class="divider"></div>
+                    <p class="mesa_icone"><img src="{% static "onshop_auto/images/mesa-icone.png" %}" /></p>
+                    <p class="header_mesa">Mesa {{ mesa }}</p>
+                </div>
+                <div id="lista_categorias">
+                    <ul>
+                        <li class="selected">Carrinho</li>
+                    </ul>
+                </div>
+                <div class="borda_branca"></div>
+            </div>
+            <div class="carrinho_tempo">
+                <h2><a class="icon_voltar" href="{% url 'onshop_auto:acessar_autoatendimento' %}"><i class="fas fa-angle-left"></i></a></h2>
+                <div class="divider"></div>
+                <h2>Confira o seu Pedido</h2>
+                <div class="divider"></div>
+            </div>
+        </div>
+        <div class="content fluxo_pedido content_auto">
+            <div class="abas_entrega_retirada">
+                <button class="btn_opcao ativo" onclick="OpenTab(event, 'entrega')">Pedido</button>
+                <button class="btn_opcao" onclick="OpenTab(event, 'retirada')">Meus detalhes</button>
+            </div>
+            <div id="entrega" class="resultado_abas pedido">
+                {% for produto in pedido.produtos.all %}
+                <div class="produto_pedido">
+                    <p class="produto_quantidade">{{ produto.quantidade }} x</p>
+                    <p class="nome_pedido">{{ produto.produto.nome }}</p>
+                    <p class="preco_pedido">R$ {{ produto.total }}&nbsp;&nbsp;&nbsp;<a class="remover_pedido" href="{% url 'onshop_auto:remover_pedido' pedido.id produto.id %}"> </a></p>
+                </div>
+                {% endfor %}
+                <!-- Não sei se isso aqui é necessário 
+                <div class="subtotal">
+                    <p>Subtotal</p>
+                    <p>R$ 17,00</p>
+                </div>-->
+                <div class="total">
+                    <p>Total</p>
+                    <p>R$ {{ pedido.total }}</p>
+                </div>
+
+                <div class="informacoes">
+                    <p>É possível cancelar um pedido clicando no X.</p>
+                    <p>Para confirmar o pedido, aperte o botão Pedido novamente.</p>
+                </div>
+            </div>
+            <div id="retirada" class="resultado_abas detalhes" style="display:none">
+                <p class="nome_detalhes">{{ pedido.comprador.nome }} - Mesa nº {{ comandasession.comanda.mesa.numero_mesa }}</p>
+                <p class="telefone_detalhes">{{ pedido.comprador.telefone }} - {{ pedido.comprador.email }}</p>
+
+                {% comment %}<p class="endereco_detalhes">
+                    {% if pedido.retirada %}
+                        {{ pedido.retirada.endereco }}
+                        <div class="endereco_adicional">
+                            <p>Nº {{ pedido.retirada.numero }} {{ pedido.retirada.ed_apto_bloco }}</p>
+                            <p>{{ pedido.retirada.pto_referencia }}</p>
+                        </div>
+                    {% else %}
+                        {{ estabelecimento.endereco }}
+                    {% endif %}
+                </p>
+                <p class="pagamento_detalhes">{{ pedido.opcao_pagamento.forma }}</p>
+                {% endcomment %}
+            </div>
+        </div>
+        <div id="footer_auto">
+            <div id="container_compra_auto" class="botoes_autoatendimento">
+                <div class="btn_ajuda">
+                    <a class="botao_help" js-comanda-id="{{ comanda }}" href="#"><img src="{% static "onshop_auto/images/ajuda-icone.png" %}" />Ajuda</a>
+                </div>
+                <div class="btn_fazer_pedido">
+                    <label for="submit-form" tabindex="0"><img src="{% static "onshop_auto/images/carrinho-icone.png" %}" /></label>                    
+                </div>
+                <div class="btn_conta">
+                    <a class="botao_conta" js-comanda-id="{{ comanda }}" href="#"><img src="{% static "onshop_auto/images/conta-icone.png" %}" />Conta</a>
+                </div>
+            {% comment %}    
+            <div id="container_compra">
+                <div class="botao_voltar_tela">
+                    <a href="{% url 'onshop_auto:acessar_autoatendimento' %}">Voltar</a>
+                </div>
+                <div class="botao_fechar_pedido">
+                    <label for="submit-form" tabindex="0">Continuar</label>
+                </div>
+            </div>
+            {% endcomment %}
+        </div>
+        <div id="modal_confirmacao">
+            <div class="content_modal">
+                <img class="ok_avaliacao" src='{% static 'onshop_auto/images/check-circle-regular.png' %}' /><p style='margin-top:20px;'>O encerramento da mesa foi solicitado.</p><p>Muito Obrigado!</p>
+                <p>Gostaria de avaliar anonimamente sua experiência enquanto aguarda?</p>
+                <form id="avaliacao_form">
+                    <div class="linha_avaliacao">
+                        <p>{{ form.nota_primeiro_campo.label }}</p>
+                        <div class="estrelinhas" js-id="p_campo"></div>
+                    </div>
+                    <div class="linha_avaliacao">
+                        <p>{{ form.nota_segundo_campo.label }}</p>
+                        <div class="estrelinhas" js-id="s_campo"></div>
+                    </div>
+                    <div class="linha_avaliacao">
+                        <p>{{ form.nota_terceiro_campo.label }}</p>
+                        <div class="estrelinhas" js-id="t_campo"></div>
+                    </div>
+                    <div class="linha_avaliacao">
+                        <p>{{ form.nota_quarto_campo.label }}</p>
+                        <div class="estrelinhas" js-id="q_campo"></div>
+                    </div>
+                    <p class="avaliacao_obs">Deseja fazer alguma observação?</p>
+                    <textarea name="mensagem" id="id_mensagem" rows="10" cols="40" ></textarea>
+                </form>
+                <div class="btn_autoatendimento">
+                    <a class="btn_avaliacao" href="#"><p>Avaliar</p></a>
+                </div>
+                <div class="btn_delivery">
+                    <a href="{% url 'onshop_auto:acessar_autoatendimento' %}"><p>Não Obrigado</p></a>
+                </div>
+            </div>
+        </div>
+        <div id="notas_dadas">
+            <div class="p_campo"></div>
+            <div class="s_campo"></div>
+            <div class="t_campo"></div>
+            <div class="q_campo"></div>
+        </div>
+    </div><!-- Fim de Container -->
+
+    {% endblock body %}
+    {% block javascript_base %}
+    {% endblock javascript_base %}
+    {% block tail_javascript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+          $(".estrelinhas").each(function(index){
+            var campo = $(this).attr('js-id');
+            //console.log(campo);
+            $(this).starRating({
+              ratedColor: 'gold',
+              starSize: 30,  
+              useFullStars: true,
+              starSize: 40,
+              disableAfterRate: false,
+              /*onHover : function(currentIndex, currentRating, $el){
+                $('.live-rating').text(currentIndex);
+              },*/
+              callback : function(currentRating, $el){
+                // Setar no campo escondido
+                var campo = $el.attr('js-id');
+                //console.log(campo);
+                //console.log(currentRating);
+                //console.log('#notas_dadas'+ '.' + campo);
+                $('#notas_dadas').find('.' + campo).text(currentRating);
+              }
+            });
+          });
+          $('.btn_avaliacao').on('click', function(event) {
+                event.preventDefault();
+                //console.log('funfando');
+                //Aqui entra o AJAX
+                //var _this = $(this);
+                //var id = _this.attr("js-produto-id");
+                //var csrfmiddlewaretoken = $("[name=csrfmiddlewaretoken]").val();
+                //console.log(csrfmiddlewaretoken);
+                //console.log(id)
+
+                if ( 
+                    $('#notas_dadas').find('.p_campo').is(':empty') ||
+                    $('#notas_dadas').find('.s_campo').is(':empty') ||
+                    $('#notas_dadas').find('.t_campo').is(':empty') ||
+                    $('#notas_dadas').find('.q_campo').is(':empty') 
+                    ){
+                    alert('É necessário preencher todos os campos!')
+                } else {
+                    var p_campo = $('#notas_dadas').find('.p_campo').text();
+                    var s_campo = $('#notas_dadas').find('.s_campo').text();
+                    var t_campo = $('#notas_dadas').find('.t_campo').text();
+                    var q_campo = $('#notas_dadas').find('.q_campo').text();
+                    var msgData = $('#id_mensagem').serializeArray();
+                    msgData = JSON.stringify(msgData);
+                    //len = formData.length;
+                    //dataObj = {};
+                    //for(i=0; i<len; i++){
+                    //    dataObj[formData[i].name] = formData[i].value;
+                    //};
+                    $.ajax({
+                        url: '{% url 'onshop_auto:receber_avaliacao' %}',
+                        type: "get",
+                        datatype: "json",
+                        data: {
+                            'p_campo': p_campo,
+                            's_campo': s_campo,
+                            't_campo': t_campo,
+                            'q_campo': q_campo,
+                            'msgData' : msgData,
+                            'key': '{{ key }}'
+                        },
+                        success: function(data){
+                            //console.log(data.product_snippet);
+                            window.location.href = '{% url 'onshop_auto:ver_cardapio' comanda.id %}';
+                        },
+                        error: function(err){
+                            console.log('error', err);
+                        }
+                    })
+                }
+            });
+                    
+        });
+      </script>
+      <script src="{% static "onshop_auto/js/jquery.star-rating-svg.js" %}"></script>    
+
+    {% endblock tail_javascript %}
+    {% block analytics %}
+
+    {% endblock analytics %}
+    </body>
+</html>

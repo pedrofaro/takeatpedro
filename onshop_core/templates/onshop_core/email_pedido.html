@@ -1,0 +1,14 @@
+{% autoescape off %}
+Olá {{ pedido.comprador.nome }}, tudo bem?
+
+Esse e-mail é a confirmação do seu pedido de nº {{ pedido.id }} feito no {{ estabelecimento.nome }}.
+
+O tempo de espera é de aproximadamente {{ estabelecimento.tempo_espera }}.
+
+Qualquer dúvida, entre em contato através do telefone {{ estabelecimento.telefone }}.
+
+----------------
+Obrigado por utilizar o sistema OnShop! :)
+Equipe OnShop
+
+{% endautoescape %}

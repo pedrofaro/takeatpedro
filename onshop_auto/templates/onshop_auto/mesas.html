@@ -1,0 +1,147 @@
+{% extends "onshop_auto/painel_produtos_auto.html" %}
+
+
+{% block breadcrumb %}
+<ol class="breadcrumb">
+  <li><a href="{% url 'onshop_core:administrativo' %}">Painel Administrativo</a></li>
+  <li><a class="active">Ver Mesas</a></li>
+  <li><a href="javascript:;" data-toggle="modal" data-target="#confirmModal">Sair</a></li>
+</ol>
+{% endblock breadcrumb %}
+
+
+  {% block menu_admin %}
+  <div class="navbar navbar-inverse" role="navigation">
+      <div class="navbar-header">
+        <div class="logo"><h1>Takeat - Painel de Administração</h1></div>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button> 
+      </div>   
+    </div>
+    <div class="template-page-wrapper">
+      <div class="navbar-collapse collapse templatemo-sidebar">
+        <ul class="templatemo-sidebar-menu">
+          <li><a href="{% url 'onshop_core:administrativo' %}"><i class="fa fa-home"></i>Painel</a></li>
+          <li class="sub">
+          <a href="javascript:;">
+          <i class="fa fa-glass"></i>Pedidos <div class="pull-right"><span class="caret"></span>
+          </div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_auto:novos_pedidos_auto' %}">Novos Pedidos ({{ qtde_novos_pedidos }})</a></li>
+              <li><a href="{% url 'onshop_auto:pedidos_andamento' %}">Em Andamento ({{ qtde_pedidos_andamento }})</a></li>
+              <li><a href="{% url 'onshop_auto:pedidos_finalizados' %}">Entregues ({{ qtde_pedidos_finalizados}}) </a></li>
+              <li><a href="{% url 'onshop_auto:ver_mensagens' %}">Mensagens ({{ qtde_mensagens }}) </a></li>
+              <li><a href="{% url 'onshop_auto:ver_avaliacoes' %}">Avaliações</a></li>
+              {% comment %}<li><a href="{% url 'onshop_core:relatorio' %}">Relatórios</a></li>{% endcomment %}
+            </ul>
+          </li>
+          <li class="sub open">
+          <a href="javascript:;">
+          <i class="fa fa-cutlery" aria-hidden="true"></i>Mesas <div class="pull-right"><span class="caret"></span>
+          </div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_auto:ver_mesas_abertas' %}">Mesas Abertas</a></li>
+              <li><a href="{% url 'onshop_auto:ver_ultimas_mesas_fechadas' %}">Mesas Fechadas</a></li>
+              <li><a href="{% url 'onshop_auto:ver_mesas' %}">Novas Mesas</a></li>
+              {% comment %}<li><a href="{% url 'onshop_core:pedidos_andamento' %}">Em Andamento ({{ qtde_pedidos_andamento }})</a></li>
+              <li><a href="{% url 'onshop_core:pedidos_finalizados' %}">Finalizados ({{ qtde_pedidos_finalizados}}) </a></li>{% endcomment %}
+              
+            </ul>
+          </li>
+          <li class="sub">
+          <a href="javascript:;">
+          <i class="fa fa-shopping-cart"></i> Produtos <div class="pull-right"><span class="caret"></span></div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_auto:ver_categorias_auto' %}">Categorias</a></li>
+              <li><a href="{% url 'onshop_auto:admin_autoatendimento' %}">Seus Produtos</a></li>
+              <li><a href="{% url 'onshop_auto:ver_complementos_auto' %}">Complementos</a></li>
+              <li><a href="{% url 'onshop_auto:ver_atributos_auto' %}">Atributos</a></li>
+            </ul>
+          </li>
+          <li class="sub">
+          <a href="javascript:;">
+          <i class="fa fa-group"></i>Garçons <div class="pull-right"><span class="caret"></span></div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_auto:ver_garcons_auto' %}">Ver Garçons</a></li>
+              <li><a href="{% url 'onshop_auto:adicionar_garcons_auto' %}">Adicionar</a></li>
+            </ul>
+          </li>
+          <li><a href="javascript:;" data-toggle="modal" data-target="#confirmModal"><i class="fas fa-sign-out-alt"></i>Sair</a></li>
+        </ul>
+      </div><!--/.navbar-collapse -->
+      {% endblock menu_admin %}
+
+
+
+      {% block content_admin %}
+          <h1>Ver Mesas Autoatendimento</h1>
+          <p class="margin-bottom-15">Gerencie as Mesas do estabelecimento aqui.</p>
+          
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="btn-group pull-right" id="templatemo_sort_btn">
+                <button type="button" class="btn btn-default">Ordenar por</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Categoria</a></li>
+                  <li><a href="#">Preço</a></li>
+                </ul>
+              </div>
+              <div class="table-responsive">
+                <h4 class="margin-bottom-15">Perguntas</h4>
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Mesa</th>
+                      <th>Código</th>
+                      <th>QR Code</th>
+                      <th>Status</th>
+                      <th>Ação</th>
+                      <th>Deletar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for mesa in mesas %}
+                    <tr class="{% cycle '' 'success' %}">
+                      <td>{{ mesa.numero_mesa }}</td>
+                      <td>{{ mesa.codigo_mesa.codigo }}</td>
+                      <td>{% if mesa.codigo_mesa.qr_code %}<img width="80px" src="{{ mesa.codigo_mesa.qr_code.url }}" />{% endif %}</td>
+                      <!-- <td>{{ pergunta.get_respostas }}</td>-->
+                      <td>
+                        {% for choice in mesa.STATUS_MESA %}
+                          {% ifequal mesa.status choice.0 %}
+                            {{ choice.1 }}
+                          {% endifequal %}
+                        {% endfor %}
+                      </td>
+                      
+                      <td><a href="{% url 'onshop_auto:renovar_codigo' mesa.id %}" class="btn btn-default">Renovar Código</a> <a target="blank" href="{% url 'onshop_auto:imprimir_qrcode' mesa.id %}" class="btn btn-default">Imprimir Código</a></td>
+                      <td><a href="{% url 'onshop_auto:deletar_mesa' mesa.id %}" class="btn btn-link">Deletar</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="row templatemo-form-buttons espaco_footer">
+                <div class="col-md-12">
+                  <a href="{% url 'onshop_auto:ver_mesas' %}"><button type="submit" class="btn btn-reset">Voltar</button></a>
+                  <a href="{% url 'onshop_auto:criar_mesa' %}"><button type="submit" class="btn btn-primary">Criar Mesa</button></a>
+                </div>
+              </div>
+          </div>
+          {% endblock 'area_form' %}
+        </div>
+{% endblock content_admin %}
+  

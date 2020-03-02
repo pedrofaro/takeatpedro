@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+  <head>
+    <title>Takeat</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Jonnpo" />
+    <!-- <link rel="icon" href="{{ MEDIA_URL }}images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="{{ MEDIA_URL }}images/favicon.ico" type="image/x-icon" /> -->
+    
+    <link rel="stylesheet" href="{% static "onshop_core/css/login.css" %}" type="text/css" media="all" />
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
+
+<body>
+  <div class="container">
+    <div class="row" id="pwd-container">
+      <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <section class="login-form">
+          {% block campo-modal %}
+            <form method="post" action="" role="login">{% csrf_token %}
+              <img src="#" class="img-responsive" alt="" />
+              
+              {{ registro.email }}
+              
+            
+              {{ registro.password }}
+              
+              {% if registro.errors %}
+                <p class="msg_error">Email ou Senha não conferem</p>
+              {% endif %}
+              <input type="hidden" name="next" value="{{ request.GET.next }}" />
+              <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Acessar</button>
+              <div>
+                <a href="{% url 'pass_words:reseta_senha' %}">Esqueceu a senha?</a>
+              </div>
+            </form>
+            {% endblock campo-modal %}
+          </section>  
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

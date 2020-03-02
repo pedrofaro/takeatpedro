@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="OnShop">
+        <meta name="author" content="OnShop">
+        <title>OnShop</title>
+        <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+    {% block stylesheet %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+    {% endblock stylesheet %}
+    {% block head_javascript %}
+    {% endblock head_javascript %}
+    </head>
+    {% block body_sistema %}
+    <body>
+    {% endblock body_sistema %}
+    {% block body %}
+    <div id="container">
+        <div id="header">
+            <ul class="header_fluxo_pedido">
+                <li class="circulo">1</li>
+                <li>&raquo;</li>
+                <li class="circulo">2</li>
+                <li class="fluxo_nome">Contato</li>
+                <li>&raquo;</li>
+                <li class="circulo">3</li>
+                <li>&raquo;</li>
+                <li class="circulo">4</li>
+            </ul>
+        </div>
+        
+        <div class="content contato">
+            <form method="post">    
+                {% csrf_token %}
+                <label for="Nome">Nome</label>
+                {{ form.nome }}
+                {{ form.nome.errors }}
+                <label for="Sobrenome">Sobrenome</label>
+                {{ form.sobrenome }}
+                {{ form.sobrenome.errors }}
+                <label for="Telefone">Telefone</label>
+                {{ form.telefone }}
+                {{ form.telefone.errors }}
+                <label for="E-mail">E-mail</label>
+                {{ form.email }}
+                {{ form.email.errors }}
+                <p>Enviaremos uma confirmação do pedido para este email.</p>
+                <input type="submit" id="submit-form" class="hidden" />
+            </form>
+        </div>
+
+        <div id="footer">
+            <div id="container_compra">
+                <div class="botao_voltar_tela">
+                    <a href="{% url 'onshop_core:entregaretirada' %}">Voltar</a>
+                </div>
+                <div class="botao_fechar_pedido">
+                    <label for="submit-form" tabindex="0">Continuar</label>
+                </div>
+            </div>
+        </div>
+        
+    </div><!-- Fim de Container -->
+
+    {% endblock body %}
+    {% block javascript_base %}
+    {% endblock javascript_base %}
+    {% block tail_javascript %}
+    <script>
+    function OpenTab(evt, nomeaba) {
+    var i;
+    var x = document.getElementsByClassName("resultado_abas");
+        for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("btn_opcao");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" ativo", "");
+    }
+    document.getElementById(nomeaba).style.display = "block";
+    evt.currentTarget.className += " ativo";
+    }
+    </script>
+    {% endblock tail_javascript %}
+    {% block analytics %}
+    {% endblock analytics %}
+    </body>
+</html>

@@ -1,0 +1,72 @@
+{% extends "onshop_core/admin_produtos.html" %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb">
+  <li><a href="{% url 'onshop_core:administrativo' %}">Painel Administrativo</a></li>
+  <li><a class="active">Complementos</a></li>
+  <li><a href="sign-in.html">Sair</a></li>
+</ol>
+{% endblock breadcrumb %}
+
+      {% block content_admin %}
+          <h1>Modelos de Perguntas Complementares</h1>
+          <p class="margin-bottom-15">Gerencie Perguntas Padrões dos Produtos.</p>
+          <div class="row margin-bottom-30">
+            <div class="col-md-12">
+              <ul class="nav nav-pills">
+                <li class="active">
+                  <a href="#">
+                    Lista de Perguntas Modelo 
+                    <span class="badge">{{ complementos|length }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="btn-group pull-right" id="templatemo_sort_btn">
+                <button type="button" class="btn btn-default">Ordenar por</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Nome</a></li>
+                  <li><a href="#">Ícone</a></li>
+                </ul>
+              </div>
+              <div class="table-responsive">
+                <h4 class="margin-bottom-15">Listas Modelos</h4>
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Perguntas</th>
+                      <th>Editar</th>
+                      <th>Deletar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for complemento in complementos %}
+                    <tr class="{% cycle '' 'success' %}">
+                      <td>{{ complemento.nome_modelo }}</td>
+                      <td><a href="{% url 'onshop_core:ver_lista_complemento' complemento.id %}" class="btn btn-default">Gerenciar</a></td>
+                      <td><a href="{% url 'onshop_core:editar_complementos' complemento.id %}" class="btn btn-default">Editar</a></td>
+                      <td><a href="{% url 'onshop_core:deletar_complemento_modelo' complemento.id %}" class="btn btn-link">Deletar</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="row templatemo-form-buttons espaco_footer">
+                <div class="col-md-12">
+                  <a href="{% url 'onshop_core:criar_complementos' %}"><button type="submit" class="btn btn-primary">Criar Nova Lista</button></a>
+                </div>
+              </div>
+          </div>
+          {% endblock 'area_form' %}
+        </div>
+{% endblock content_admin %}
+  

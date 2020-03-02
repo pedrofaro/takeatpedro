@@ -1,0 +1,173 @@
+{% extends "onshop_core/index.html" %}
+
+
+{% block breadcrumb %}
+<ol class="breadcrumb">
+  <li><a href="{% url 'onshop_core:administrativo' %}">Painel Administrativo</a></li>
+  <li><a class="active">Produtos</a></li>
+  <li><a href="javascript:;" data-toggle="modal" data-target="#confirmModal">Sair</a></li>
+</ol>
+{% endblock breadcrumb %}
+
+
+  {% block menu_admin %}
+  <div class="navbar navbar-inverse" role="navigation">
+      <div class="navbar-header">
+        <div class="logo"><h1>Takeat - Painel de Administração</h1></div>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button> 
+      </div>   
+    </div>
+    <div class="template-page-wrapper">
+      <div class="navbar-collapse collapse templatemo-sidebar">
+        <ul class="templatemo-sidebar-menu">
+          <li><a href="{% url 'onshop_core:administrativo' %}"><i class="fa fa-home"></i>Painel</a></li>
+          <li class="sub">
+          <a href="javascript:;">
+          <i class="fa fa-glass"></i>Pedidos <div class="pull-right"><span class="caret"></span>
+          </div>
+            </a>
+            {% block menu_painel_pedidos %}
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_auto:novos_pedidos_auto' %}">Novos Pedidos ({{ qtde_novos_pedidos }})</a></li>
+              <li><a href="{% url 'onshop_auto:pedidos_andamento' %}">Em Andamento ({{ qtde_pedidos_andamento }})</a></li>
+              <li><a href="{% url 'onshop_auto:pedidos_finalizados' %}">Entregues ({{ qtde_pedidos_finalizados}}) </a></li>
+              <li><a href="{% url 'onshop_auto:ver_mensagens' %}">Mensagens ({{ qtde_mensagens }}) </a></li>
+              <li><a href="{% url 'onshop_auto:ver_avaliacoes' %}">Avaliações</a></li>
+              {% comment %}<li><a href="{% url 'onshop_core:relatorio' %}">Relatórios</a></li>{% endcomment %}
+            </ul>
+            {% endblock menu_painel_pedidos %}
+          </li>
+          <li class="sub">
+          <a href="javascript:;">
+          <i class="fa fa-cutlery" aria-hidden="true"></i>Mesas <div class="pull-right"><span class="caret"></span>
+          </div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_auto:ver_mesas_abertas' %}">Mesas Abertas</a></li>
+              <li><a href="{% url 'onshop_auto:ver_ultimas_mesas_fechadas' %}">Mesas Fechadas</a></li>
+              <li><a href="{% url 'onshop_auto:ver_mesas' %}">Novas Mesas</a></li>
+              {% comment %}<li><a href="{% url 'onshop_core:pedidos_andamento' %}">Em Andamento ({{ qtde_pedidos_andamento }})</a></li>
+              <li><a href="{% url 'onshop_core:pedidos_finalizados' %}">Finalizados ({{ qtde_pedidos_finalizados}}) </a></li>{% endcomment %}
+              
+            </ul>
+          </li>
+          {% comment %}<li class="sub">
+          <a href="javascript:;">
+          <i class="fas fa-receipt" aria-hidden="true"></i>Comandas <div class="pull-right"><span class="caret"></span>
+          </div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_core:novos_pedidos' %}">Comandas Abertas</a></li>
+              <li><a href="{% url 'onshop_core:novos_pedidos' %}">Comandas Fechadas</a></li>
+            </ul>
+          </li>
+          {% endcomment %}
+          <li class="sub open">
+          <a href="javascript:;">
+          <i class="fa fa-shopping-cart"></i> Produtos <div class="pull-right"><span class="caret"></span></div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_auto:ver_categorias_auto' %}">Categorias</a></li>
+              <li><a href="{% url 'onshop_auto:admin_autoatendimento' %}">Seus Produtos</a></li>
+              <li><a href="{% url 'onshop_auto:ver_complementos_auto' %}">Complementos</a></li>
+              <li><a href="{% url 'onshop_auto:ver_atributos_auto' %}">Atributos</a></li>
+            </ul>
+          </li>
+          <li class="sub">
+          <a href="javascript:;">
+          <i class="fa fa-group"></i>Garçons <div class="pull-right"><span class="caret"></span></div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_auto:ver_garcons_auto' %}">Ver Garçons</a></li>
+              <li><a href="{% url 'onshop_auto:adicionar_garcons_auto' %}">Adicionar</a></li>
+            </ul>
+          </li>
+          <li><a href="javascript:;" data-toggle="modal" data-target="#confirmModal"><i class="fas fa-sign-out-alt"></i>Sair</a></li>
+        </ul>
+      </div><!--/.navbar-collapse -->
+      {% endblock menu_admin %}
+
+
+      {% block content_admin %}
+          <h1>Produtos Autoatendimento</h1>
+          <p class="margin-bottom-15">Gerencie os produtos que serão vendidos por aqui.</p>
+          <div class="row margin-bottom-30">
+            <div class="col-md-12">
+              <ul class="nav nav-pills">
+                <li class="active">
+                  <a href="#">
+                    Produtos 
+                    <span class="badge">{{ produtos|length }}</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Em Promoção 
+                    <span class="badge">0</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="btn-group pull-right" id="templatemo_sort_btn">
+                <button type="button" class="btn btn-default">Ordenar por</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Categoria</a></li>
+                  <li><a href="#">Preço</a></li>
+                </ul>
+              </div>
+              <div class="table-responsive">
+                <h4 class="margin-bottom-15">Produtos</h4>
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Foto</th>
+                      <th>Categoria</th>
+                      <th>Nome</th>
+                      <th>Descrição</th>
+                      <th>Preço</th>
+                      <th>Editar</th>
+                      <th>Complementos</th>
+                      <th>Deletar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for produto in produtos %}
+                    <tr class="{% cycle '' 'success' %}">
+                      <td>{% if produto.thumbnail %}<img src="{{ produto.thumbnail.url }}?{% now 'YHiu' %}"/>{% endif %}</td>
+                      <td>{{ produto.categoria }}</td>
+                      <td>{{ produto.nome }}</td>
+                      <td>{{ produto.descricao }}</td>
+                      <td>{% if produto.preco_promocao %}
+                        <span style="text-decoration: line-through;">{{ produto.preco }}</span> {{ produto.preco_promocao }}
+                       {% else %}{{ produto.preco }}{% endif %}</td>
+                      <td><a href="{% url 'onshop_auto:editar_produtos_auto' produto.id %}" class="btn btn-default">Editar</a></td>
+                      <td><a href="{% url 'onshop_auto:adicionar_complemento_auto' produto.id %}" class="btn btn-default">Adicionar</a></td>
+                      <td><a href="{% url 'onshop_auto:deletar_produto_auto' produto.id %}" class="btn btn-link">Deletar</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="row templatemo-form-buttons espaco_footer">
+                <div class="col-md-12">
+                  <a href="{% url 'onshop_auto:adicionar_produtos_auto' %}"><button type="submit" class="btn btn-primary">Adicionar Produto</button></a>
+                </div>
+              </div>
+          </div>
+          {% endblock 'area_form' %}
+        </div>
+{% endblock content_admin %}
+  

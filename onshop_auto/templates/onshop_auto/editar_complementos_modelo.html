@@ -1,0 +1,33 @@
+{% extends "onshop_auto/lista_complementos_modelo.html" %}
+
+     {% block content_admin %}
+          <h1>Modelos de Perguntas Complementares Autoatendimento</h1>
+          <p class="margin-bottom-15">Gerencie Perguntas Padrões dos Produtos.</p>
+          
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-12">
+            <form role="form" id="templatemo-preferences-form" method="post" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-12 margin-bottom-15">
+                  <label for="{{ form.resposta.id_for_label }}" class="control-label">Nome</label>
+                  {{ form.nome_modelo }}
+                  {{ form.nome_modelo.errors }}
+                </div>
+              </div>
+              {% csrf_token %}
+              <div class="row templatemo-form-buttons">
+                <div class="col-md-12">
+                  <button type="submit" class="btn btn-primary">Salvar</button>
+                  <button type="reset" class="btn btn-default">Limpar</button>
+                </div>
+              </div>
+            </form>
+            {{ form.error }}
+          </div>
+        </div>
+          {% endblock 'area_form' %}
+        </div>
+{% endblock content_admin %}
+
+  

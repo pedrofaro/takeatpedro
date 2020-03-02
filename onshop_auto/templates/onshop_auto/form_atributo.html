@@ -1,0 +1,26 @@
+{% extends "onshop_auto/atributos.html" %}
+
+          {% block 'area_form' %}
+          <form role="form" id="templatemo-preferences-form" method="post" enctype="multipart/form-data">
+            <div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.nome.id_for_label }}" class="control-label">Nome</label>
+                {{ form.nome }}
+              </div>
+            </div>
+            {% comment %}<div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.descricao.id_for_label }}" class="control-label">Ícone</label>
+                {{ form.icone }}                  
+              </div>
+            </div>{% endcomment %}
+            {% csrf_token %}
+            <div class="row templatemo-form-buttons">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <button type="reset" class="btn btn-default">Limpar</button>
+              </div>
+            </div>
+          </form>
+          {% endblock 'area_form' %}
+  

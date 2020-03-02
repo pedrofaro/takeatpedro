@@ -1,0 +1,65 @@
+{% load bootstrap4 %}
+<HTML>
+<HEAD>
+    <TITLE>Pedidos</TITLE>
+    {% bootstrap_css %}
+</HEAD>
+
+<BODY>
+
+    <h2>Pedidos</h2>
+    {%bootstrap_messages%}
+    <a href="#modal-mesas" data-toggle="modal">Adicionar pedido</a>
+
+    <div class="modal fade bd-example-modal-lg show" id="modal-mesas" role="dialog">
+        <div class="modal-dialog" role="documet">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar pedido</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class = 'container'>
+                        <form action="{% url 'onshop_core:p_pedidos_pag' %}" method="post" class="form" autocomplete="off">
+                            {%csrf_token%}
+
+                            {%bootstrap_form form%}
+                            {%buttons%}
+                                <button type="submit" class="btn btn-primary">Adicionar pedido</button>
+                            {%endbuttons%}
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table container clearfix col-md-6 configdiv">
+        <thead>
+            <tr>
+                <th scope="col">Forma</th>
+                <th scope="col">Valor</th>
+                <th scope="col">Mesa</th>
+                <th scope="col">Id do Pedido</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+                <tr>
+                    <td scope="row">{{pedido.forma}}</td>
+                    <td scope="row">{{pedido.valor}}</td>
+                    <td scope="row">{{pedido.mesa}}</td>
+                    <td scope="row">{{pedido.id_pedido}}</td>
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+{% bootstrap_javascript jquery='full' %}
+</BODY>
+</HTML>

@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Takeat">
+        <meta name="author" content="Takeat">
+        <title>OnShop</title>
+        <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+        <link href="{% static "onshop_auto/css/auto_estilo.css" %}" rel="stylesheet">
+    {% block stylesheet %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+    {% endblock stylesheet %}
+    {% block head_javascript %}
+    {% endblock head_javascript %}
+    </head>
+    {% block body_sistema %}
+    <body class="back_cinza">
+    {% endblock body_sistema %}
+    {% block body %}
+    <div id="container" class="back_cinza">
+        {% comment %}
+        <div id="header">
+            <ul class="header_fluxo_pedido">
+                
+            </ul>
+        </div>
+        {% endcomment %}
+        <div class="contato leitor_qr_code">
+            {% comment %}
+            <div class="center" id="reader" style="width: 300px; height: 250px;">
+                <video id="html5_qrcode_video" style="width: 300px; height: 250px;"></video>
+                <canvas id="qr-canvas" style="display: none" />
+                <!--<canvas id="qr-canvas" width="298px" height="248px" style="display: none" /> -->
+            </div>
+            {% endcomment %}
+            <div class="mensagem_qr_code">Leia o QR Code que está na mesa.<br/>Você também pode digitar o código da mesa para abrir o cardápio.</div>
+
+            <div id="loadingMessage">
+                <div class="quadrado_qr_code"><p>🎥 Não é possível acessar a câmera do seu aparelho (autorize o acesso da câmera).</p>
+                </div>
+            </div>
+  <canvas id="canvas" style="width: 300px; height: 280px;" hidden></canvas>
+  <div id="output" hidden>
+    <div id="outputMessage"></div>
+    <div hidden><b>Data:</b> <span id="outputData"></span></div>
+  </div>
+
+            <form method="post">    
+                {% csrf_token %}
+                {% comment %}<label for="Nome">Código</label>{% endcomment %}
+                {{ form.codigo }}
+                {{ form.codigo.errors }}
+                <input type="submit" id="submit-form" value="Acessar Cardápio" {% comment %}class="hidden"{% endcomment %} />
+            </form>
+            <div class="spacer"></div>
+            <div class="linha_gambiarra"></div>
+        </div>
+
+        {% comment %}
+        <div id="footer">
+            <div id="container_compra">
+                <div class="botao_voltar_tela">
+                    
+                </div>
+                <div class="botao_fechar_pedido">
+                    <label for="submit-form" tabindex="0">Continuar</label>
+                </div>
+            </div>
+        </div>
+        {% endcomment %}
+    </div><!-- Fim de Container -->
+
+    {% endblock body %}
+    {% block javascript_base %}
+    {% endblock javascript_base %}
+    {% block tail_javascript %}
+    <script
+              src="https://code.jquery.com/jquery-1.9.1.min.js"
+              integrity="sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ="
+              crossorigin="anonymous"></script>
+    {% comment %}<script src="{% static "onshop_auto/js/jquery-1.9.1.min.js" %}"></script>{% endcomment %}
+    <script src="{% static "onshop_auto/js/jsQR.js" %}"></script>
+    {% comment %}<script src="{% static "onshop_auto/js/html5-qrcode.min.js" %}"></script>{% endcomment %}
+    <script type="text/javascript">
+    $(document).ready(function(){
+            var video = document.createElement("video");
+    var canvasElement = document.getElementById("canvas");
+    var canvas = canvasElement.getContext("2d");
+    var loadingMessage = document.getElementById("loadingMessage");
+    var outputContainer = document.getElementById("output");
+    var outputMessage = document.getElementById("outputMessage");
+    var outputData = document.getElementById("outputData");
+
+    function drawLine(begin, end, color) {
+      canvas.beginPath();
+      canvas.moveTo(begin.x, begin.y);
+      canvas.lineTo(end.x, end.y);
+      canvas.lineWidth = 4;
+      canvas.strokeStyle = color;
+      canvas.stroke();
+    }
+
+    // Use facingMode: environment to attemt to get the front camera on phones
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+      video.srcObject = stream;
+      video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+      video.play();
+      requestAnimationFrame(tick);
+    });
+
+    function tick() {
+      loadingMessage.innerText = "⌛ Carregando video..."
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        loadingMessage.hidden = true;
+        canvasElement.hidden = false;
+        outputContainer.hidden = false;
+
+        canvasElement.height = video.videoHeight;
+        canvasElement.width = video.videoWidth;
+        canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+        var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+        var code = jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: "dontInvert",
+        });
+        if (code) {
+          drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
+          drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
+          drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
+          drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
+          //outputMessage.hidden = true;
+          //outputData.parentElement.hidden = false;
+          //outputData.innerText = code.data;
+          AjaxRequisicao(code.data);
+        } else {
+          outputMessage.hidden = false;
+          outputData.parentElement.hidden = true;
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+        /*
+        var aux_data = ''
+        $('#reader').html5_qrcode(function(data){
+                //$.ajax({
+                //    type: "POST",
+                //    url: '',
+                //    data: {'csrfmiddlewaretoken': '{{csrf_token}}', 'codigo': data}
+                    //success: function(data, textStatus){
+                        //something
+                    //},  
+                //}); 
+                aux_data = 'blau';//'{% comment %}{% url get_info_codigo2 %}{% endcomment %}' + data + '/' + '{{ senha_temp.senha }}';
+                $('#teste').html(aux_data);
+                window.location.href = aux_data; //É possível ser chamada essa função através da url por conta da geração de um código 
+            },
+            function(error){
+
+            },
+            function(videoError){
+
+            }    
+        );
+*/
+    function AjaxRequisicao(data){
+        //alert(data);
+        $.ajax({
+                    type: "get",
+                    url: '{% url 'onshop_auto:registrar_codigo_ajax' %}',
+                    data: {'codigo': data},
+                    success: function(data){
+                        //alert(data);
+                        //alert(data.product_snippet);
+                        window.location.href = data.product_snippet;
+                    },
+                    error: function(err){
+                        console.log(err);
+                        //alert(err.codigo);
+                    }
+            });
+    };
+});
+    </script>
+    {% endblock tail_javascript %}
+    {% block analytics %}
+    {% endblock analytics %}
+    </body>
+</html>

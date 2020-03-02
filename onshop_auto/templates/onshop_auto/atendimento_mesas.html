@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Takeat">
+    <meta name="author" content="Takeat">
+    <title>Takeat</title>
+    <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+    {% block stylesheet %}
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+              integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+              crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+              crossorigin="anonymous">
+    {% endblock stylesheet %}
+    {% block head_javascript %}
+    {% endblock head_javascript %}
+</head>
+{% block body_sistema %}
+    <body>
+{% endblock body_sistema %}
+{% block body %}
+    <div id="container">
+        <div id="header">
+            <ul class="header_fluxo_pedido" style="padding: 0 16px;">
+                <li>Atendimento - Mesas</li>
+            </ul>
+        </div>
+        <div class="content" style="padding-top: 40px;">
+            <div class="list-group list-group-flush">
+                {% for mesa in mesas %}
+                    <a href="{% url 'onshop_auto:atendimento_ver_mesa' garcom.id garcom.token mesa.numero_mesa %}"
+                       class="list-group-item list-group-item-action">Mesa {{ mesa.numero_mesa }}</a>
+                {% endfor %}
+            </div>
+            <a class="sair_garcom btn btn-dark" href="{% url 'onshop_auto:sair_garcom' garcom.id garcom.token %}">Sair</a>
+        </div>
+    </div>
+    <!-- Fim de Container -->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+{% endblock body %}
+{% block javascript_base %}
+{% endblock javascript_base %}
+{% block tail_javascript %}
+{% endblock tail_javascript %}
+{% block analytics %}
+{% endblock analytics %}
+</body>
+</html>

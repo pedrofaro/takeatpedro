@@ -1,0 +1,70 @@
+{% load static %}
+            <div class="msg_fechamento">
+                <p>O total parcial no momento é de:</p>
+                <p class="dinheiro_total">R$ {{ total }}</p>
+            </div>
+            <div class="msg_pergunta">
+                <p>Descrição dos pedidos:</p>
+                {% for item in pedidos %}
+              <div class="linha fonte-grande margem-media">
+                <p class="p_coluna"><span class="negrito">{{ item.0 }}</p>
+                <p class="s_coluna endireitar"> <spam class="negrito">R$ {{ item.1 }}</span></p>
+              </div>
+              {% for x in item.2 %}
+              <div class="linha fonte-media margem-media">
+                <p class="p_coluna">{{ x.4 }} -- {{ x.1 }}x {{ x.0 }}</p>
+                <p class="s_coluna endireitar">R$ {{ x.5 }}</p>
+              </div>
+              <div class="linha fonte-media margem-media">
+                <p>{{ x.2 }}</p>
+              </div>
+              {% endfor %}
+          {% endfor %}
+                <p class="linha fonte-media margem-grande">Obs: Pagamento de 10% é opcional, acrescido ao valor indicado acima.</p>
+            </div>
+            <div class="msg_pergunta">
+                <p>Deseja fechar a conta?</p>
+            </div>
+            <div class="btn_autoatendimento">
+                <a class="btn_ok_entendido sem_muito_espaco" js-comanda-id="{{ comanda }}" href="#">SIM, FECHAR CONTA</i></a>
+            </div>
+            <div class="btn_delivery">
+                <a class="btn_nada_mesmo_feito" href="#">CANCELAR</a>
+            </div>
+
+            <script>
+                $('.btn_ok_entendido').click(function(event) {
+                    event.preventDefault();
+                    //console.log('funfando');
+                    var _this = $(this);
+                    var id = _this.attr("js-comanda-id");
+                    $.ajax({
+                        url: '{% url 'onshop_auto:pedir_encerramento_mesa' %}',
+                        type: "get",
+                        datatype: "json",
+                        data: {
+                            'id': id,
+                        //    'formData': formData,
+                            'key': '{{ key }}'
+                        },
+                        success: function(data){
+                            //$('.modal-ajuda').html("");
+                            //console.log(data);
+                            //$('.help-content').removeClass("back_vermelho");
+                            //$('.help-content').addClass("back_verde");
+                            window.location.href = data.product_snippet;
+                            /*
+                            $('.help-content').find('.modal-ajuda').html("<img src='{% static 'onshop_auto/images/check-circle-regular.png' %}' /><p style='margin-top:20px;'>O encerramento da mesa foi solicitado.</p><p>Muito Obrigado!</p>");*/
+                            //console.log(data['produto']);
+                        },
+                        error: function(err){
+                            console.log('error', err);
+                        }
+                    })
+                });
+                $('.btn_nada_mesmo_feito').click(function(event) {
+                    event.preventDefault();
+                    $('.modal-ajuda').html("");
+                    $('.modal_help').css('display', 'none');
+                });
+            </script>

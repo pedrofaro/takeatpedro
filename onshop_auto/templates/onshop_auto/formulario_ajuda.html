@@ -1,0 +1,53 @@
+{% load static %}
+            <div class="msg_fechamento">
+                <p>Como podemos te ajudar?</p>
+            </div>
+            <form>
+                {{ form.mensagem }}
+                {{ form.mensagem.errors }}
+            </form>
+            <div class="btn_autoatendimento">
+                <a class="btn_ok_entendido sem_muito_espaco" js-comanda-id="{{ comanda }}" href="#">OK</a>
+            </div>
+
+            <script>
+                $('.btn_ok_entendido').click(function(event) {
+                    event.preventDefault();
+                    //console.log('funfando');
+                    var _this = $(this);
+                    var id = _this.attr("js-comanda-id");
+                    var mensagem = $('#id_mensagem').val();
+                    $.ajax({
+                        url: '{% url 'onshop_auto:enviar_pedido_ajuda' %}',
+                        type: "get",
+                        datatype: "json",
+                        data: {
+                            'id': id,
+                            'mensagem': mensagem,
+                        //    'formData': formData,
+                            'key': '{{ key }}'
+                        },
+                        success: function(data){
+                            $('.modal-ajuda').html("");
+                            //console.log(data);
+                            $('.help-content').removeClass("back_vermelho");
+                            $('.help-content').addClass("back_verde");
+                            $('.help-content').find('.modal-ajuda').html("<img src='{% static 'onshop_auto/images/check-circle-regular.png' %}' /><p style='margin-top:20px;'>Sua solicitação foi enviada e a equipe já está a caminho para atendê-lo.</p>");
+                            //console.log(data['produto']);
+                        },
+                        error: function(err){
+                            console.log('error', err);
+                            $('.modal-ajuda').html("");
+                            $('.help-content').removeClass("back_verde");
+                            $('.help-content').addClass("back_vermelho");
+                            //console.log(data);
+                            $('.help-content').find('.modal-ajuda').html("<p>Ocorreu um erro, por favor envie novamente a sua solicitação.</p>");
+                        }
+                    })
+                });
+                $('.btn_nada_feito').click(function(event) {
+                    event.preventDefault();
+                    $('.modal-ajuda').html("");
+                    $('.modal_help').css('display', 'none');
+                });
+            </script>

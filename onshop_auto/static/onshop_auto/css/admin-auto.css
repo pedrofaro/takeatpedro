@@ -1,0 +1,27 @@
+#avaliacoes_admin li{
+	display: flex;
+	font-size: 18px;
+	margin-bottom: 30px;
+}
+.estrelas{
+	display: flex;
+	margin: 0 10px;
+}
+.estrelas p{
+	padding-top: 4px;
+	margin-left: 10px;
+}
+.medias-notas{
+	border-left: 1px solid #eee;
+}
+ul.respostas_avaliacoes{
+	list-style: none;
+}
+ul.respostas_avaliacoes .estrelas{
+	justify-content: space-between;
+	width: 280px;
+	margin: 0 auto;
+}
+ul.respostas_avaliacoes .estrelas p{
+	display: none;
+}

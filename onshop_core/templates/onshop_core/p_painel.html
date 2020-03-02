@@ -1,0 +1,31 @@
+{% load bootstrap4 %}
+<HTML>
+<HEAD>
+    <TITLE>Painel</TITLE>
+    {% bootstrap_css %}
+</HEAD>
+
+<BODY>
+
+    <h2>Painel</h2>
+
+    <table class="table container clearfix col-md-6 configdiv">
+        <thead>
+            <tr>
+                <th scope="col">Forma</th>
+                <th scope="col">Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for metodo, count in lista %}
+                <tr>
+                    <td scope="row">{{metodo}}</td>
+                    <td scope="row">{{count}}</td>
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+{% bootstrap_javascript jquery='full' %}
+</BODY>
+</HTML>

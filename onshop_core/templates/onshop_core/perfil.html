@@ -1,0 +1,50 @@
+{% extends "onshop_core/preferences.html" %}
+
+
+
+      {% block content_admin %}
+          <h1>Perfil</h1>
+          <p class="margin-bottom-15">Informações sobre a Conta de Acesso.</p>
+          <div class="row">
+            <div class="col-md-12">
+              <form method="post" role="form" id="templatemo-preferences-form">
+                <div class="row">
+                  <div class="col-md-12 margin-bottom-15">
+                    <label id="{{ form.email.id_for_label }}" class="control-label">Endereço de Email</label>
+                    {{ form.email }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 margin-bottom-15">
+                    <label for="currentPassword">Senha</label>
+                    <input type="password" class="form-control" id="currentPassword" value="********" disabled>  
+                  </div>
+                  <div class="col-md-6 margin-bottom-15">
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6 margin-bottom-15">
+                    <label class="control-label" id="{{ form.password1.id_for_label }}">Nova Senha</label>
+                    {{ form.password1 }}
+                  </div>
+                  
+                  <div class="col-md-6 margin-bottom-15">
+                    <label class="control-label" id="{{ form.password2.id_for_label }}">Confirme a Senha</label>
+                    {{ form.password2}}  
+                  </div>
+                </div>
+                {% if form.errors %}
+                <p class="msg_error">As senhas são diferentes!</p>
+                {% endif %}
+                {% csrf_token %}
+              <div class="row templatemo-form-buttons">
+                <div class="col-md-12">
+                  <button type="submit" class="btn btn-primary">Salvar</button>
+                  <button type="reset" class="btn btn-default">Cancelar</button>    
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+{% endblock content_admin %}

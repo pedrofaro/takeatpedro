@@ -1,0 +1,22 @@
+{% extends "onshop_core/bairros.html" %}
+
+          {% block 'area_form' %}
+          <form role="form" id="templatemo-preferences-form" method="post" enctype="multipart/form-data">
+            <div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.bairro.id_for_label }}" class="control-label">Nome</label>
+                {{ form.bairro }}
+                {{ form.bairro.errors }}
+              </div>
+            </div>
+            {% csrf_token %}
+            <div class="row templatemo-form-buttons">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <button type="reset" class="btn btn-default">Limpar</button>
+              </div>
+            </div>
+          </form>
+          {{ form.error }}
+          {% endblock 'area_form' %}
+  

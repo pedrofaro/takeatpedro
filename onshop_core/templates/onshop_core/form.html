@@ -1,0 +1,26 @@
+{% extends "onshop_core/categorias.html" %}
+
+          {% block 'area_form' %}
+          <form role="form" id="templatemo-preferences-form" method="post">
+            <div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.nome.id_for_label }}" class="control-label">Nome</label>
+                {{ form.nome }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.descricao.id_for_label }}" class="control-label">Descrição</label>
+                {{ form.descricao }}                  
+              </div>
+            </div>
+            {% csrf_token %}
+            <div class="row templatemo-form-buttons">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <button type="reset" class="btn btn-default">Limpar</button>
+              </div>
+            </div>
+          </form>
+          {% endblock 'area_form' %}
+  

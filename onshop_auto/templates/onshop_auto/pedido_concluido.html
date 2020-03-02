@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="OnShop">
+        <meta name="author" content="OnShop">
+        <title>OnShop</title>
+        <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+    {% block stylesheet %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+    {% endblock stylesheet %}
+    {% block head_javascript %}
+    {% endblock head_javascript %}
+    </head>
+    {% block body_sistema %}
+    <body>
+    {% endblock body_sistema %}
+    {% block body %}
+    <div id="container">
+        <div id="header">
+            <h1>{{ estabelecimento.nome }} - Autoatendimento</h1>
+        </div>
+        <div class="content fluxo_pedido">
+            <div class="pg_confirmacao">
+                <i class="fas fa-check-circle"></i>
+                <p class="agradecimento">Obrigado, {{ pedido.comprador.nome }}</p>
+                <p>Agora é só esperar que o seu pedido já está a caminho!</p>
+                <div class="box_info_time">
+                    <div class="inner_box">
+                        <p>Pedido nº</p>
+                        <p>{{ pedido.id }}</p>
+                    </div>
+                    <div class="inner_box">
+                        <p>Comanda:</p>
+                        <p>{{ comandasession.comanda.id }}</p>
+                    </div>
+                </div>
+                <p>Seu pedido foi enviado às {{ pedido.hora_criacao|date:"H:m" }}.</p>
+                <p class="duvida">Qualquer dúvida, chame um de nossos funcionários.</p>
+                
+            </div>
+        </div>
+        <div id="footer">
+            <div id="container_compra">
+                <div class="entendido">
+                    <a href="{% url 'onshop_auto:acessar_autoatendimento' %}">Entendido</a>
+                </div>
+            </div>
+        </div>
+    </div><!-- Fim de Container -->
+
+    {% endblock body %}
+    {% block javascript_base %}
+    {% endblock javascript_base %}
+    {% block tail_javascript %}
+    <script>
+    function OpenTab(evt, nomeaba) {
+    var i;
+    var x = document.getElementsByClassName("resultado_abas");
+        for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("btn_opcao");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" ativo", "");
+    }
+    document.getElementById(nomeaba).style.display = "block";
+    evt.currentTarget.className += " ativo";
+    }
+    </script>
+    {% endblock tail_javascript %}
+    {% block analytics %}
+    {% endblock analytics %}
+    </body>
+</html>

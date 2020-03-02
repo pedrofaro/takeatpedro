@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Takeat">
+        <meta name="author" content="Takeat">
+        <title>Takeat</title>
+        <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+        <link href="{% static "onshop_auto/css/auto_estilo.css" %}" rel="stylesheet">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
+        <script type="text/javascript" src="{% static "onshop_auto/js/instascan.min.js" %}"></script>
+    {% block stylesheet %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+    {% endblock stylesheet %}
+    {% block head_javascript %}
+    {% endblock head_javascript %}
+    </head>
+    {% block body_sistema %}
+    <body class="back_cinza">
+    {% endblock body_sistema %}
+    {% block body %}
+    <div id="container" class="back_cinza">
+      <div class="contato leitor_qr_code">
+        <div class="mensagem_qr_code">Leia o QR Code que está na mesa.<br/>Você também pode digitar o código da mesa para abrir o cardápio.</div>
+
+        <video id="preview"></video>
+
+        <form method="post">    
+            {% csrf_token %}
+            {% comment %}<label for="Nome">Código</label>{% endcomment %}
+            {{ form.codigo }}
+            {{ form.codigo.errors }}
+            <input type="submit" id="submit-form" value="Acessar Cardápio" {% comment %}class="hidden"{% endcomment %} />
+        </form>
+        <div class="spacer"></div>
+        <div class="linha_gambiarra"></div>
+      </div>
+    </div><!-- Fim de Container -->
+
+    {% endblock body %}
+    {% block javascript_base %}
+    {% endblock javascript_base %}
+    {% block tail_javascript %}
+    
+    <script
+              src="https://code.jquery.com/jquery-1.9.1.min.js"
+              integrity="sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ="
+              crossorigin="anonymous"></script>
+    {% comment %}<script src="{% static "onshop_auto/js/jquery-1.9.1.min.js" %}"></script>{% endcomment %}
+    
+    {% comment %}<script src="{% static "onshop_auto/js/html5-qrcode.min.js" %}"></script>{% endcomment %}
+    
+    <script type="text/javascript">
+          let scanner = new Instascan.Scanner({ mirror: false, video: document.getElementById('preview') });
+          scanner.addListener('scan', function (content) {
+            //alert(content);
+            AjaxRequisicao(content);
+          });
+          Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+              scanner.start(cameras[cameras.length - 1]);
+            } else {
+              alert('🎥 Não é possível acessar a câmera do seu aparelho (autorize o acesso da câmera).');
+            }
+          }).catch(function (e) {
+            console.error(e);
+          });
+          function AjaxRequisicao(data){
+        //alert(data);
+        $.ajax({
+                    type: "get",
+                    url: '{% url 'onshop_auto:registrar_codigo_ajax' %}',
+                    data: {'codigo': data},
+                    success: function(data){
+                        //alert(data);
+                        //alert(data.product_snippet);
+                        window.location.href = data.product_snippet;
+                    },
+                    error: function(err){
+                        //console.log(err);
+                        alert('Não foi possível efetuar a leitura correta do código. Por favor, tente novamente.');
+                    }
+            });
+    };
+    </script>
+    {% endblock tail_javascript %}
+    {% block analytics %}
+    {% endblock analytics %}
+    </body>
+</html>
+
+
+

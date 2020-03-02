@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+  <title>Painel Administração Takeat</title>
+  <meta name="keywords" content="" />
+  <meta name="description" content="Painel de Administração Takeat" />
+  <meta name="viewport" content="width=device-width">        
+  <link rel="stylesheet" href="{% static "onshop_core/css/templatemo_main.css" %}">
+  {% block style %}
+  {% endblock style %}
+  
+<!-- 
+Dashboard Template 
+http://www.templatemo.com/preview/templatemo_415_dashboard
+-->
+</head>
+<body>
+  {% block menu_admin %}
+  <div class="navbar navbar-inverse" role="navigation">
+      <div class="navbar-header">
+        <div class="logo"><h1>Takeat - Painel de Administração</h1></div>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button> 
+      </div>   
+    </div>
+    <div class="template-page-wrapper">
+      <div class="navbar-collapse collapse templatemo-sidebar">
+        <ul class="templatemo-sidebar-menu">
+          <li><a href="{% url 'onshop_core:administrativo' %}"><i class="fa fa-home"></i>Painel</a></li>
+          <li class="sub open">
+          <a href="javascript:;">
+          <i class="fa fa-cog"></i>Configurações <div class="pull-right"><span class="caret"></span>
+          </div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_core:config_perfil' %}">Perfil</a></li>
+              <li><a href="{% url 'onshop_core:config_estabelecimento' %}">Estabelecimento</a></li>
+              <li><a href="{% url 'onshop_core:ver_bairros' %}">Bairros Atendidos</a></li>
+            </ul>
+          </li>
+          <li class="sub open">
+          <a href="javascript:;">
+          <i class="fa fa-shopping-cart"></i> Produtos <div class="pull-right"><span class="caret"></span></div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_core:ver_categorias' %}">Categorias</a></li>
+              <li><a href="{% url 'onshop_core:admin_produtos' %}">Seus Produtos</a></li>
+              <li><a href="{% url 'onshop_core:ver_complementos' %}">Complementos</a></li>
+              <li><a href="{% url 'onshop_core:ver_atributos' %}">Atributos</a></li>
+            </ul>
+          </li>
+          <li class="sub open">
+          <a href="javascript:;">
+          <i class="fas fa-truck"></i>Pedidos <div class="pull-right"><span class="caret"></span>
+          </div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_core:novos_pedidos' %}">Novos Pedidos</a></li>
+              <li><a href="{% url 'onshop_core:pedidos_andamento' %}">Em Andamento</a></li>
+              <li><a href="{% url 'onshop_core:pedidos_finalizados' %}">Finalizados</a></li>
+            </ul>
+          </li>
+          <li><a href="javascript:;" data-toggle="modal" data-target="#confirmModal"><i class="fas fa-sign-out-alt"></i>Sair</a></li>
+        </ul>
+      </div><!--/.navbar-collapse -->
+      {% endblock menu_admin %}
+      <div class="templatemo-content-wrapper">
+        <div class="templatemo-content">
+          {% block breadcrumb %}
+          <ol class="breadcrumb">
+            <li><a class="active" href="{% url 'onshop_core:administrativo' %}">Painel Administrativo</a></li>
+            <li><a href="{% url 'onshop_core:sair' %}">Sair</a></li>
+          </ol>
+          {% endblock breadcrumb %}
+          {% block content_admin %}
+          <h1>Painel</h1>
+          <p>Olá, seja muito bem-vindo ao Painel Administrativo da Takeat!</p>
+          <p>É por aqui que você acompanha todos os pedidos dos clientes e pode ver como está andando o seu negócio.</p><p>Boas Vendas!</p> 
+          {% endblock content_admin %}
+        </div>
+      </div>
+      <!-- Modal -->
+      <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title" id="myModalLabel">Tem certeza de que deseja sair?</h4>
+            </div>
+            <div class="modal-footer">
+              <a href="{% url 'onshop_core:sair' %}" class="btn btn-primary">Sim</a>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% block modal %}
+      {% endblock modal %}
+      <footer class="templatemo-footer">
+        <div class="templatemo-copyright">
+          <p>&copy; Takeat - {% now "Y" %}. Todos os direitos reservados.</p>
+        </div>
+      </footer>
+    </div>
+    <link rel="stylesheet" href="{% static "onshop_core/css/templatemo_main.css" %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/278ab5be72.js"></script>
+    <script src="{% static "onshop_core/js/jquery.min.js" %}"></script>
+    <script src="{% static "onshop_core/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "onshop_core/js/Chart.min.js" %}"></script>
+    <script src="{% static "onshop_core/js/templatemo_script.js" %}"></script>
+    <script type="text/javascript">
+    // Line chart
+    var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+    var lineChartData = {
+      labels : ["January","February","March","April","May","June","July"],
+      datasets : [
+      {
+        label: "My First dataset",
+        fillColor : "rgba(220,220,220,0.2)",
+        strokeColor : "rgba(220,220,220,1)",
+        pointColor : "rgba(220,220,220,1)",
+        pointStrokeColor : "#fff",
+        pointHighlightFill : "#fff",
+        pointHighlightStroke : "rgba(220,220,220,1)",
+        data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+      },
+      {
+        label: "My Second dataset",
+        fillColor : "rgba(151,187,205,0.2)",
+        strokeColor : "rgba(151,187,205,1)",
+        pointColor : "rgba(151,187,205,1)",
+        pointStrokeColor : "#fff",
+        pointHighlightFill : "#fff",
+        pointHighlightStroke : "rgba(151,187,205,1)",
+        data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+      }
+      ]
+
+    }
+
+    window.onload = function(){
+      var ctx_line = document.getElementById("templatemo-line-chart").getContext("2d");
+      window.myLine = new Chart(ctx_line).Line(lineChartData, {
+        responsive: true
+      });
+    };
+
+    $('#myTab a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+
+    $('#loading-example-btn').click(function () {
+      var btn = $(this);
+      btn.button('loading');
+      // $.ajax(...).always(function () {
+      //   btn.button('reset');
+      // });
+  });
+  </script>
+  {% block js_footer %}
+  {% endblock js_footer %}
+</body>
+</html>

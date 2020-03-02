@@ -1,0 +1,165 @@
+{% load static %}
+            <script type="text/javascript" src="{% static "onshop_auto/js/jquery.mask.min.js" %}"></script>
+            <div class="msg_fechamento">
+                <p style="font-size: 22px">Carrinho</p>
+            </div>
+            <p class="msg_informacoes">Informações</p>
+            {% if not comprador %}
+            <p class="info_msg_carrinho">Insira os dados abaixo e participe dos nossos descontos exclusivos.</p>
+            <div class="content contato content_auto content_carrinho">
+                <form class="formulario_contato">     
+                    <label for="id_telefone">Celular:</label>
+                    {{ form.telefone }}
+                    {{ form.telefone.errors }}
+                    <input type="submit" id="submit-form" class="hidden" />
+                </form>
+                {% comment %}
+                <form method="post">    
+                    {% csrf_token %}
+                    
+                    <label for="Nome">Nome</label>
+                    {{ form.nome }}
+                    {{ form.nome.errors }}
+                    <label for="Telefone">Telefone</label>
+                    {{ form.telefone }}
+                    {{ form.telefone.errors }}
+                    <label for="E-mail">E-mail</label>
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                    
+                    {{ form }}
+                    <input type="submit" id="submit-form" class="hidden" />
+                </form>
+                {% endcomment %}
+            </div>
+            {% endif %}
+            <div id="produtos_carrinho">
+                {% if pedido.produtos.all %}
+                <div class="item_quantidade">
+                    <p>Item</p>
+                    <p>Qtd.</p>
+                </div>
+                    {% for produto in pedido.produtos.all %}
+                    
+                    <div class="container_produto_carrinho">
+                        <img class="img_produto img_produto_auto" src="{% if produto.produto.thumbnail %}{{ produto.produto.thumbnail.url }}?{% now 'YHiu' %}{% endif %}" />
+                        <div class="descricao">
+                            <p class="nome_produto nome_produto_auto">{{ produto.produto.nome }}</p>
+                        </div>
+                        <p class="produto_quantidade">{{ produto.quantidade }}</p>
+                    </div>
+
+                    {% comment %}
+                    <div class="produto_pedido">
+                        <p class="produto_quantidade">{{ produto.quantidade }} x</p>
+                        <p class="nome_pedido">{{ produto.produto.nome }}</p>
+                        <p class="preco_pedido">R$ {{ produto.total }}&nbsp;&nbsp;&nbsp;<a class="remover_pedido" href="{% url 'onshop_auto:remover_pedido_carrinho' pedido.id produto.id 1 %}"> </a></p>
+                    </div>
+                    {% endcomment %}
+                    {% endfor %}
+                    {% comment %}
+                    <div class="total">
+                        <p>Total</p>
+                        <p>R$ {{ pedido.total }}</p>
+                    </div>
+                    {% endcomment %}
+                {% else %}
+                <div>
+                    <p>Vazio</p>
+                    <p class="mensagem_conf_car">Você não tem nenhum item no carrinho</p>
+                </div>
+                {% endif %}
+            </div>
+            {% if pedido.produtos.all %}
+            
+                {% if not comprador %}
+                <div class="btn_carrinho_msg">
+                    <label class="btn_ok_entendido sem_muito_espaco" for="submit-form" tabindex="0">Fazer Pedido - R$ {{ pedido.total }}</label>
+                </div>
+                {% else %}
+                <div class="btn_carrinho_msg">
+                    <a href="{% url 'onshop_auto:concluir_pedido' %}"" class="btn_ok_entendido sem_muito_espaco" js-comanda-id="{{ comanda }}" href="#">Fazer Pedido - R$ {{ pedido.total }}</a>
+                </div>
+                {% endif %}
+            {% else %}
+            <div class="btn_carrinho_msg">
+                <a class="btn_ok_fechar btn_ok_entendido sem_muito_espaco" js-comanda-id="{{ comanda }}" href="#">FECHAR</a>
+            </div>
+            {% endif %}
+            <script>
+                /*
+                $('.btn_ok_entendido').click(function(event) {
+                    event.preventDefault();
+                    //console.log('funfando');
+                    var _this = $(this);
+                    var id = _this.attr("js-comanda-id");
+                    var mensagem = $('#id_mensagem').val();
+                    $.ajax({
+                        url: '{% url 'onshop_auto:enviar_pedido_ajuda' %}',
+                        type: "get",
+                        datatype: "json",
+                        data: {
+                            'id': id,
+                            'mensagem': mensagem,
+                        //    'formData': formData,
+                            'key': '{{ key }}'
+                        },
+                        success: function(data){
+                            $('.modal-ajuda').html("");
+                            //console.log(data);
+                            $('.help-content').removeClass("back_vermelho");
+                            $('.help-content').addClass("back_verde");
+                            $('.help-content').find('.modal-ajuda').html("<img src='{% static 'onshop_auto/images/check-circle-regular.png' %}' /><p style='margin-top:20px;'>Sua solicitação foi enviada e a equipe já está a caminho para atendê-lo.</p>");
+                            //console.log(data['produto']);
+                        },
+                        error: function(err){
+                            console.log('error', err);
+                            $('.modal-ajuda').html("");
+                            $('.help-content').removeClass("back_verde");
+                            $('.help-content').addClass("back_vermelho");
+                            //console.log(data);
+                            $('.help-content').find('.modal-ajuda').html("<p>Ocorreu um erro, por favor envie novamente a sua solicitação.</p>");
+                        }
+                    })
+                });*/
+                $('#id_telefone').mask("(00) 00000-0000");
+                /*
+                $('#id_telefone').on("input", function(){
+                    //alert('funfando');
+                    //console.log(this.value);
+                    if (this.value.length == 15 ){
+                        console.log(this.value);
+                        alert('funfou!');
+                    };
+                });*/
+                $('.formulario_contato').submit(function(event) {
+                    event.preventDefault();
+                    //var id = $('.produtoid').val();
+                    var formData = $('.formulario_contato').serializeArray();
+                    formData = JSON.stringify(formData);
+                    $.ajax({
+                        url: '{% url 'onshop_auto:inserir_contato' %}',
+                        type: "get",
+                        datatype: "json",
+                        data: {
+                            //'id': id,
+                            'formData': formData,
+                            'key': '{{ key }}'
+                        },
+                        success: function(data){
+                            //ok
+                            //console.log(data['produto']);
+                            console.log(data.product_snippet);
+                            window.location.href = data.product_snippet;
+                        },
+                        error: function(err){
+                            console.log('error', err);
+                        }
+                    })
+                });
+                $('.btn_ok_fechar').click(function(event) {
+                    event.preventDefault();
+                    $('.modal-ajuda').html("");
+                    $('.modal_help').css('display', 'none');
+                });
+            </script>

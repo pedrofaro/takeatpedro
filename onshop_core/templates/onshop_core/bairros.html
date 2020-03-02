@@ -1,0 +1,63 @@
+{% extends "onshop_core/preferences.html" %}
+
+
+
+{% block content_admin %}
+          <h1>Bairros Atendidos</h1>
+          <p class="margin-bottom-15">Verifique os Bairros atendidos pelo seu Estabelecimento.</p>
+          <div class="row margin-bottom-30">
+            <div class="col-md-12">
+              <ul class="nav nav-pills">
+                <li class="active">
+                  <a href="#">
+                    Bairros Atendidos
+                    <span class="badge">{{ bairros|length }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="btn-group pull-right" id="templatemo_sort_btn">
+                <button type="button" class="btn btn-default">Ordenar por</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Nome</a></li>
+                  <li><a href="#">Ícone</a></li>
+                </ul>
+              </div>
+              <div class="table-responsive">
+                <h4 class="margin-bottom-15">Novos Pedidos</h4>
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Editar</th>
+                      <th>Ação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for bairro in bairros %}
+                    <tr class="{% cycle '' 'success' %}">
+                      <td>{{ bairro }}</td>
+                      <td><a href="{% url 'onshop_core:editar_bairro' bairro.id %}" class="btn btn-default">Editar</a></td>
+                      <td><a href="{% url 'onshop_core:deletar_bairro' bairro.id %}" class="btn btn-link">Deletar</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="row templatemo-form-buttons espaco_footer">
+                <div class="col-md-12">
+                  <a href="{% url 'onshop_core:adicionar_bairro' %}"><button type="submit" class="btn btn-primary">Adicionar Bairro Atendido</button></a>
+                </div>
+              </div>
+          </div>
+          {% endblock 'area_form' %}
+        </div>
+{% endblock content_admin %}

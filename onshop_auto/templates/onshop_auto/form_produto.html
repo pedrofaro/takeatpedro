@@ -1,0 +1,71 @@
+{% extends "onshop_auto/painel_produtos_auto.html" %}
+
+          {% block 'area_form' %}
+          <form role="form" id="templatemo-preferences-form" method="post" enctype="multipart/form-data">
+            <div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.imagem.id_for_label }}" class="control-label">Imagem</label>
+                {{ form.imagem }}
+                {{ form.imagem.errors }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.nome.id_for_label }}" class="control-label">Nome</label>
+                {{ form.nome }}
+                {{ form.nome.errors }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.descricao.id_for_label }}" class="control-label">Descrição</label>
+                {{ form.descricao }}
+                {{ form.descricao.errors }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.categoria.id_for_label }}" class="control-label">Categoria</label>
+                {{ form.categoria }}
+                {{ form.categoria.errors }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.preco.id_for_label }}" class="control-label">Preço</label>
+                {{ form.preco }}
+                {{ form.preco.errors }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.preco_promocao.id_for_label }}" class="control-label">Preço Promocional</label>
+                {{ form.preco_promocao }}
+                {{ form.preco_promocao.errors }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.atributos.id_for_label }}" class="control-label">Atributos</label>
+                {{ form.atributos }}
+                {{ form.atributos.errors }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 margin-bottom-15">
+                <label for="{{ form.esgotado.id_for_label }}" class="control-label">Produto Esgotado?</label>
+                {{ form.esgotado }}
+                {{ form.esgotado.errors }}
+              </div>
+            </div>
+            {% csrf_token %}
+            <div class="row templatemo-form-buttons">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <button type="reset" class="btn btn-default">Limpar</button>
+              </div>
+            </div>
+          </form>
+          {{ form.error }}
+          {% endblock 'area_form' %}
+  

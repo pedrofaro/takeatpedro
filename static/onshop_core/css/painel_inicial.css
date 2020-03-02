@@ -1,0 +1,51 @@
+#pi_content_block{
+	display: block;
+	width: auto;
+	min-height: 500px;
+	background-color: #fff;
+}
+#pi_content{
+	display: flex;
+	flex-wrap: wrap;
+}
+a.link_funcoes{
+	height: 150px;
+	min-width: 150px;
+	max-width: 150px;
+	margin-top: 25px;
+	margin-left: 25px;
+	border: gray 5px solid; 
+	border-radius: 15px;
+	text-align: center;
+	color: #000;
+	text-decoration: none;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+a.link_funcoes:hover, a.link_funcoes:visited, a.link_funcoes:active{
+	color: #000;
+	border-radius: 15px;	
+	background: #eee;
+	text-decoration: none;
+}
+.imagem-link{
+	margin-top: 10px;
+	font-size: 70px;
+}
+.desc-link{
+	margin-bottom: 20px;
+}
+.numero-pedidos{
+	position: absolute;
+	width: 35px;
+	height: 35px;
+	margin-top: 2px;
+	margin-left: 2px;
+	font-size: 20px;
+	background-color: red;
+	border-radius: 50%;
+}
+.numero-pedidos p{
+	padding-top: 2px;
+}

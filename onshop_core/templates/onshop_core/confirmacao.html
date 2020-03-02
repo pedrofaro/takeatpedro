@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Takeat">
+        <meta name="author" content="Takeat">
+        <title>OnShop</title>
+        <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+    {% block stylesheet %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+    {% endblock stylesheet %}
+    {% block head_javascript %}
+    {% endblock head_javascript %}
+    </head>
+    {% block body_sistema %}
+    <body>
+    {% endblock body_sistema %}
+    {% block body %}
+    <div id="container">
+        <div id="header">
+            <ul class="header_fluxo_pedido">
+                <li class="circulo">1</li>
+                <li class="circulo">2</li>
+                <li class="circulo">3</li>
+                <li>&raquo;</li>
+                <li class="circulo">4</li>
+                <li class="fluxo_nome">Confirmação</li>
+            </ul>
+        </div>
+        <div class="content fluxo_pedido">
+            <div class="abas_entrega_retirada">
+                <button class="btn_opcao ativo" onclick="OpenTab(event, 'entrega')">Pedido</button>
+                <button class="btn_opcao" onclick="OpenTab(event, 'retirada')">Meus detalhes</button>
+            </div>
+            <div id="entrega" class="resultado_abas pedido">
+                {% for produto in pedido.produtos.all %}
+                <div class="produto_pedido">
+                    <p class="produto_quantidade">{{ produto.quantidade }} x</p>
+                    <p class="nome_pedido">{{ produto.produto.nome }}</p>
+                    <p class="preco_pedido">R$ {{ produto.total }}&nbsp;&nbsp;&nbsp;<a class="remover_pedido" href="{% url 'onshop_core:remover_pedido' pedido.id produto.id %}"> </a></p>
+                </div>
+                {% endfor %}
+                <!-- Não sei se isso aqui é necessário 
+                <div class="subtotal">
+                    <p>Subtotal</p>
+                    <p>R$ 17,00</p>
+                </div>-->
+                <div class="total">
+                    <p>Total</p>
+                    <p>R$ {{ pedido.total }}</p>
+                </div>
+            </div>
+            <div id="retirada" class="resultado_abas detalhes" style="display:none">
+                <p class="nome_detalhes">{{ pedido.comprador.nome }} {{ pedido.comprador.sobrenome }}</p>
+                <p class="telefone_detalhes">{{ pedido.comprador.telefone }}</p>
+                <p class="endereco_detalhes">
+                    {% if pedido.retirada %}
+                        {{ pedido.retirada.endereco }}
+                        <div class="endereco_adicional">
+                            <p>Nº {{ pedido.retirada.numero }} {{ pedido.retirada.ed_apto_bloco }}</p>
+                            <p>{{ pedido.retirada.pto_referencia }}</p>
+                        </div>
+                    {% else %}
+                        {{ estabelecimento.endereco }}
+                    {% endif %}
+                </p>
+                <p class="pagamento_detalhes">{{ pedido.opcao_pagamento.forma }}</p>
+            </div>
+        </div>
+        <div id="footer">
+            <div id="container_compra">
+                <div class="botao_voltar_tela">
+                    <a href="{% url 'onshop_core:pagamento' %}">Voltar</a>
+                </div>
+                <div class="botao_fechar_pedido">
+                    <a id="btn_analisa_pedido" href="#">Fazer Pedido</a>
+                    {% comment %}
+                    {% if pedido.quantidade_itens or pedido.total %}
+                    <a href="{% url 'onshop_core:concluir_pedido' %}">Confirmar Pedido</a>
+                    {% else %}
+                    <a href="">Confirmar Pedido</a>
+                    {% endif %}
+                    {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div><!-- Fim de Container -->
+
+    {% endblock body %}
+    <script
+              src="https://code.jquery.com/jquery-3.3.1.min.js"
+              integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+              crossorigin="anonymous"></script>
+    {% block javascript_base %}
+    {% endblock javascript_base %}
+    {% block tail_javascript %}
+    <script>
+    function OpenTab(evt, nomeaba) {
+    var i;
+    var x = document.getElementsByClassName("resultado_abas");
+        for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("btn_opcao");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" ativo", "");
+    }
+    document.getElementById(nomeaba).style.display = "block";
+    evt.currentTarget.className += " ativo";
+    }
+    $(document).ready(function(){
+        $('#btn_analisa_pedido').on('click', function(event) {
+            //Função que avalia se é possível dar prosseguimento ao pedido 
+            //caso tenha pedido mínimo e se a loja está aberta
+            event.preventDefault();
+            //console.log('funfando');
+            $.ajax({
+                url: '{% url 'onshop_core:analisa_pedido' %}',
+                type: "get",
+                //data: {'data': 'blau'}, //Apenas por sintaxe mesmo
+                success: function(data){
+                    //console.log(data);
+                    window.location.href = '{% url 'onshop_core:concluir_pedido' %}';
+                },
+                error: function(err){
+                    alert(err.responseJSON.product_snippet);
+                }
+            })
+        });
+
+    });
+    </script>
+    {% endblock tail_javascript %}
+    {% block analytics %}
+    {% endblock analytics %}
+    </body>
+</html>

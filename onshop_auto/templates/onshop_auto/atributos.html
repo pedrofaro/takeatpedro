@@ -1,0 +1,64 @@
+{% extends "onshop_auto/painel_produtos_auto.html" %}
+
+      {% block content_admin %}
+          <h1>Atributos Autoatendimento</h1>
+          <p class="margin-bottom-15">Adicione ou Delete os Atributos de Produtos que deseja vender.</p>
+          <div class="row margin-bottom-30">
+            <div class="col-md-12">
+              <ul class="nav nav-pills">
+                <li class="active">
+                  <a href="#">
+                    Atributos 
+                    <span class="badge">{{ atributos|length }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="btn-group pull-right" id="templatemo_sort_btn">
+                <button type="button" class="btn btn-default">Ordenar por</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Nome</a></li>
+                  <li><a href="#">Ícone</a></li>
+                </ul>
+              </div>
+              <div class="table-responsive">
+                <h4 class="margin-bottom-15">Atributos</h4>
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <!-- <th>Ícone</th> -->
+                      <th>Nome</th>
+                      <th>Editar</th>
+                      <th>Deletar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for atributo in atributos %}
+                    <tr class="{% cycle '' 'success' %}">
+                      {% comment %}<td>{% if atributo.icone %}<img src="{{ atributo.icone.url }}" />{% endif %}</td>{% endcomment %}
+                      <td>{{ atributo.nome }}</td>
+                      <td><a href="{% url 'onshop_auto:editar_atributos_auto' atributo.id %}" class="btn btn-default">Editar</a></td>                    
+                      <td><a href="{% url 'onshop_auto:deletar_atributos_auto' atributo.id %}" class="btn btn-link">Deletar</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="row templatemo-form-buttons espaco_footer">
+                <div class="col-md-12">
+                  <a href="{% url 'onshop_auto:adicionar_atributos_auto' %}"><button type="submit" class="btn btn-primary">Adicionar Atributo</button></a>
+                </div>
+              </div>
+          </div>
+          {% endblock 'area_form' %}
+        </div>
+{% endblock content_admin %}
+  

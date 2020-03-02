@@ -1,0 +1,92 @@
+{% load static %}
+            <script type="text/javascript" src="{% static "onshop_auto/js/jquery.mask.min.js" %}"></script>
+            <div class="msg_fechamento">
+                <p style="font-size: 22px">Carrinho</p>
+            </div>
+            <div id="produtos_carrinho">
+                {% if pedido.produtos.all %}
+                <div class="item_quantidade">
+                    <p>Item</p>
+                    <p>Qtd.</p>
+                </div>
+                    {% for produto in pedido.produtos.all %}
+                    
+                    <div class="container_produto_carrinho">
+                        <img class="img_produto img_produto_auto" src="{% if produto.produto.thumbnail %}{{ produto.produto.thumbnail.url }}?{% now 'YHiu' %}{% endif %}" />
+                        <div class="descricao">
+                            <p class="nome_produto nome_produto_auto">{{ produto.produto.nome }}</p>
+                        </div>
+                        <p class="produto_quantidade">{{ produto.quantidade }}</p>
+                    </div>
+
+                    
+                    {% endfor %}
+                    
+                {% else %}
+                <div>
+                    <p>Vazio</p>
+                    <p class="mensagem_conf_car">Você não tem nenhum item no carrinho</p>
+                </div>
+                {% endif %}
+            </div>
+            {% if pedido.produtos.all %}
+                <div class="btn_carrinho_msg">
+                    <a href="{% url 'onshop_auto:concluir_pedido_garcom' comanda  garcom.id token %}"" class="btn_ok_entendido sem_muito_espaco" js-comanda-id="{{ comanda }}" href="#">Fazer Pedido - R$ {{ pedido.total }}</a>
+                </div>
+            {% else %}
+            <div class="btn_carrinho_msg">
+                <a class="btn_ok_fechar btn_ok_entendido sem_muito_espaco" js-comanda-id="{{ comanda }}" href="#">FECHAR</a>
+            </div>
+            {% endif %}
+            <script>
+                /*
+                $('.btn_ok_entendido').click(function(event) {
+                    event.preventDefault();
+                    //console.log('funfando');
+                    var _this = $(this);
+                    var id = _this.attr("js-comanda-id");
+                    var mensagem = $('#id_mensagem').val();
+                    $.ajax({
+                        url: '{% url 'onshop_auto:enviar_pedido_ajuda' %}',
+                        type: "get",
+                        datatype: "json",
+                        data: {
+                            'id': id,
+                            'mensagem': mensagem,
+                        //    'formData': formData,
+                            'key': '{{ key }}'
+                        },
+                        success: function(data){
+                            $('.modal-ajuda').html("");
+                            //console.log(data);
+                            $('.help-content').removeClass("back_vermelho");
+                            $('.help-content').addClass("back_verde");
+                            $('.help-content').find('.modal-ajuda').html("<img src='{% static 'onshop_auto/images/check-circle-regular.png' %}' /><p style='margin-top:20px;'>Sua solicitação foi enviada e a equipe já está a caminho para atendê-lo.</p>");
+                            //console.log(data['produto']);
+                        },
+                        error: function(err){
+                            console.log('error', err);
+                            $('.modal-ajuda').html("");
+                            $('.help-content').removeClass("back_verde");
+                            $('.help-content').addClass("back_vermelho");
+                            //console.log(data);
+                            $('.help-content').find('.modal-ajuda').html("<p>Ocorreu um erro, por favor envie novamente a sua solicitação.</p>");
+                        }
+                    })
+                });*/
+                
+                /*
+                $('#id_telefone').on("input", function(){
+                    //alert('funfando');
+                    //console.log(this.value);
+                    if (this.value.length == 15 ){
+                        console.log(this.value);
+                        alert('funfou!');
+                    };
+                });*/
+                $('.btn_ok_fechar').click(function(event) {
+                    event.preventDefault();
+                    $('.modal-ajuda').html("");
+                    $('.modal_help').css('display', 'none');
+                });
+            </script>

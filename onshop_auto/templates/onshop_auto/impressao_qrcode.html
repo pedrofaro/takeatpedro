@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+  <head>
+    <title>OnShop - Sistema Autoatendimento</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Agência Jonnpo" />
+    <link rel="stylesheet" href="{% static "onshop_core/css/estilo.css" %}">
+
+    <style>
+      body {
+        background-color: rgba(0,0,0,0.8);
+        font-size: 16px;
+      }
+      #container_pedido{
+        width: 80mm;
+        margin: 10px auto;
+        border: 1px solid #000;
+      }
+      .pedido_content{
+        padding: 10px;
+        background-color: #fff;
+      }
+      .negrito{
+        font-weight: bold;
+      }
+      .margem-media{
+        margin-bottom: 10px;
+      }
+      .margem-grande{
+        margin-bottom: 20px;
+      }
+      .fonte-pequena{
+        font-size: 12px;
+      }
+      .fonte-media{
+        font-size: 14px;
+      }
+      .centralizar{
+        text-align: center;
+      }
+      .endireitar{
+        text-align: right;
+      }
+      .linha{
+        display: flex;
+      }
+      .p_coluna{
+        width: 70%;
+      }
+      .s_coluna{
+        width: 30%;
+      }
+      .coluna_media{
+        width: 50%;
+      }
+      h1{
+        font-size: 20px;
+      }
+      @media print{
+        body *{
+          visibility: hidden;
+        }
+        .pedido_content *{
+          visibility: visible;
+        }
+        .pedido_content{
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+      }
+    </style>
+  </head>
+<body>
+  <div id="container_pedido">
+      <div class="pedido_content">
+        <h1 class="centralizar negrito margem-media">Mesa #{{ mesa.numero_mesa }} - {{ estabelecimento }}</h1>
+        <p class="fonte-pequena">----------------------------------------------------------------------</p>
+        <p class="centralizar fonte-grande negrito"><img src="{{ codigo.qr_code.url }}" /></p>
+        <p class="fonte-pequena">----------------------------------------------------------------------</p>
+        {% comment %}<p class="centralizar fonte-pequena margem-grande">Para fazer um pedido acesse {{ site }}, escaneie o código ou digite os números abaixo</p>{% endcomment %}
+        <h1 class="centralizar fonte-grande centralizar margem-media">{{ codigo.codigo }}</h1>
+        
+      </div>
+  </div>
+</div>
+    <script type="text/javascript">
+      window.onload = function(){ window.print(); };
+    </script>
+</body>
+</html>

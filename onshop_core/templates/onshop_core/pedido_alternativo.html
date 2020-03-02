@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+  <head>
+    <title>OnShop - Sistema Online de Pedidos</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Agência Jonnpo" />
+    <link rel="stylesheet" href="{% static "onshop_core/css/estilo.css" %}">
+
+    <style>
+      body {
+        background-color: rgba(0,0,0,0.8);
+        font-size: 16px;
+      }
+      #container_pedido{
+        width: 80mm;
+        margin: 10px auto;
+        border: 1px solid #000;
+      }
+      .pedido_content{
+        padding: 10px;
+        background-color: #fff;
+      }
+      .negrito{
+        font-weight: bold;
+      }
+      .margem-media{
+        margin-bottom: 10px;
+      }
+      .margem-grande{
+        margin-bottom: 20px;
+      }
+      .fonte-pequena{
+        font-size: 12px;
+      }
+      .fonte-media{
+        font-size: 14px;
+      }
+      .centralizar{
+        text-align: center;
+      }
+      .endireitar{
+        text-align: right;
+      }
+      .linha{
+        display: flex;
+      }
+      .p_coluna{
+        width: 70%;
+      }
+      .s_coluna{
+        width: 30%;
+      }
+      .coluna_media{
+        width: 50%;
+      }
+      h1{
+        font-size: 20px;
+      }
+      @media print{
+        body *{
+          visibility: hidden;
+        }
+        .pedido_content *{
+          visibility: visible;
+        }
+        .pedido_content{
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+      }
+    </style>
+  </head>
+<body>
+  <div id="container_pedido">
+      <div class="pedido_content">
+        <h1 class="centralizar negrito margem-media">Pedido #{{ pedido.id }} - {{ estabelecimento }}</h1>
+        <p class="fonte-media margem-media"><span class="negrito">Cliente:</span> {{ pedido.comprador.nome }} {{ pedido.comprador.sobrenome }}</p>
+        <p class="fonte-media margem-grande"><span class="negrito">Telefone:</span> {{ pedido.comprador.telefone }}</p>
+        <p class="centralizar margem-media"><span class="negrito">{% if pedido.retirada %}Entrega{% else %}Retirada{% endif %}</span></p>
+        <div class="linha fonte-media margem-media">
+          <p><span class="negrito">Endereço:</span> {% if pedido.retirada %} {{ pedido.retirada.endereco }} {{ pedido.retirada.numero }} {{ pedido.retirada.ed_apto_bloco }} {% if pedido.retirada.pto_referencia %}<span class="negrito">Ponto Referência:</span> {{ pedido.retirada.pto_referencia }}{% endif %}{% else %} Retirada no Estabelecimento{% endif %}</p>
+        </div>
+        <div class="linha fonte-media margem-media">
+          <p><span class="negrito">Forma de Pagamento:</span> {{ pedido.opcao_pagamento.forma }}</p>
+        </div>
+        <div class="linha fonte-media margem-media">
+          <p><span class="negrito">Troco para: </span> {% if pedido.opcao_pagamento.troco %}{{ pedido.opcao_pagamento.troco }}{% else %}-----{% endif %}</p>
+        </div>
+        <p class="fonte-pequena">-----------------------------------------------------------------------</p>
+        <div class="linha">
+            <p class="p_coluna fonte-pequena">Descrição</p>
+            <p class="s_coluna fonte-pequena centralizar">Total</p>
+        </div>
+        <p class="fonte-pequena">-----------------------------------------------------------------------</p>
+        {% for produto in pedido.produtos.all %}
+        <div class="linha fonte-grande {% if produto.complemento %}margem-media{% else %}margem-grande{% endif %}">
+          <p class="p_coluna">(#{{ pedido.id }} - {{ forloop.counter }}/{{ pedido.produtos.all.count }}) <br/><span class="negrito">{{ produto.quantidade }}x {{ produto.produto }}</span></p>
+          <p class="s_coluna centralizar">R$ {{ produto.total }}</p>
+        </div>
+        <div class="linha fonte-media margem-grande">
+          <p>{{ produto.complemento|safe }}</p>
+        </div>
+        {% endfor %}
+        </table>    
+        <p class="fonte-pequena margem-media">-----------------------------------------------------------------------</p>
+        <p class="fonte-grande negrito endireitar margem-grande">Total: R$ {{ pedido.total }}</p>
+        <p class="centralizar fonte-pequena margem-pequena">Obrigado por utilizar a OnShop!</p>
+      </div>
+  </div>
+</div>
+    <script type="text/javascript">
+      window.onload = function(){ window.print(); };
+    </script>
+</body>
+</html>

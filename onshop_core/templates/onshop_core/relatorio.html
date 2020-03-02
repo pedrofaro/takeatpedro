@@ -1,0 +1,79 @@
+{% extends "onshop_core/admin_produtos.html" %}
+{% load static %}
+
+
+  {% block style %}
+  <link rel="stylesheet" href="{% static "onshop_core/css/painel_inicial.css" %}">
+  {% endblock style %}
+
+  {% block menu_admin %}
+  <div class="navbar navbar-inverse" role="navigation">
+      <div class="navbar-header">
+        <div class="logo"><h1>OnShop - Painel de Administração</h1></div>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button> 
+      </div>   
+    </div>
+    <div class="template-page-wrapper">
+      <div class="navbar-collapse collapse templatemo-sidebar">
+        <ul class="templatemo-sidebar-menu">
+          <li><a href="{% url 'onshop_core:administrativo' %}"><i class="fa fa-home"></i>Painel</a></li>
+          <li class="sub open">
+          <a href="javascript:;">
+          <i class="fas fa-truck"></i>Pedidos <div class="pull-right"><span class="caret"></span>
+          </div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_core:novos_pedidos' %}">Novos Pedidos</a></li>
+              <li><a href="{% url 'onshop_core:pedidos_andamento' %}">Em Andamento</a></li>
+              <li><a href="{% url 'onshop_core:pedidos_finalizados' %}">Finalizados</a></li>
+              <li><a href="{% url 'onshop_core:relatorio' %}">Relatórios</a></li>
+            </ul>
+          </li>
+          <li class="sub">
+          <a href="javascript:;">
+          <i class="fa fa-shopping-cart"></i> Produtos <div class="pull-right"><span class="caret"></span></div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_core:ver_categorias' %}">Categorias</a></li>
+              <li><a href="{% url 'onshop_core:admin_produtos' %}">Seus Produtos</a></li>
+              <li><a href="{% url 'onshop_core:ver_complementos' %}">Complementos</a></li>
+              <li><a href="{% url 'onshop_core:ver_atributos' %}">Atributos</a></li>
+            </ul>
+          </li>
+          <li><a href="javascript:;" data-toggle="modal" data-target="#confirmModal"><i class="fas fa-sign-out-alt"></i>Sair</a></li>
+        </ul>
+      </div><!--/.navbar-collapse -->
+      {% endblock menu_admin %}
+
+      {% block content_admin %}
+          <h1>Relatórios</h1>
+          <p class="margin-bottom-15">Acompanhe aqui o quanto a ferramenta tem gerado de valor.</p>
+          
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-3">
+              <a class="link_funcoes" href="#">
+                <div class="imagem-link"><i class="fas fa-truck"></i></div>
+                <div class="desc-link">Quantidade Pedidos</div>
+              </a>
+              <a class="link_funcoes" href="#">
+                <div class="imagem-link"><i class="fas fa-truck"></i></div>
+                <div class="desc-link">Valor Total</div>
+              </a>
+            </div>
+            <div class="col-md-9 col-sm-9 margin-bottom-30">
+              <div class="panel panel-success">
+                <div class="panel-heading">Data Visualization</div>
+                <canvas id="templatemo-line-chart" height="120" width="500"></canvas>
+              </div> 
+            </div>   
+          </div>
+          {% endblock 'area_form' %}
+        </div>
+{% endblock content_admin %}
+  

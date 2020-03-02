@@ -1,0 +1,66 @@
+{% extends "onshop_auto/painel_produtos_auto.html" %}
+
+      {% block content_admin %}
+          <h1>Categorias Autoatendimento</h1>
+          <p class="margin-bottom-15">Adicione ou Delete as Categorias de Produtos que deseja vender dentro do estabelecimento.</p>
+          <div class="row margin-bottom-30">
+            <div class="col-md-12">
+              <ul class="nav nav-pills">
+                <li class="active">
+                  <a href="#">
+                    Categorias 
+                    <span class="badge">{{ categorias|length }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="btn-group pull-right" id="templatemo_sort_btn">
+                <button type="button" class="btn btn-default">Ordenar por</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Nome</a></li>
+                  <li><a href="#">Descrição</a></li>
+                </ul>
+              </div>
+              <div class="table-responsive">
+                <h4 class="margin-bottom-15">Categorias</h4>
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Tempo de Preparo</th>
+                      <th>Descrição</th>
+                      <th>Editar</th>
+                      <th>Deletar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for categoria in categorias %}
+                    <tr class="{% cycle '' 'success' %}">
+                      <td>{{ categoria.nome }}</td>
+                      <td>{{ categoria.tempo_preparo }}</td>
+                      <td>{{ categoria.descricao }}</td>
+                      <td><a href="{% url 'onshop_auto:editar_categorias_auto' categoria.id %}" class="btn btn-default">Editar</a></td>                    
+                      <td><a href="{% url 'onshop_auto:deletar_categoria_auto' categoria.id %}" class="btn btn-link">Deletar</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="row templatemo-form-buttons espaco_footer">
+                <div class="col-md-12">
+                  <a href="{% url 'onshop_auto:adicionar_categorias_auto' %}"><button type="submit" class="btn btn-primary">Adicionar Categoria</button></a>
+                </div>
+              </div>
+          </div>
+          {% endblock 'area_form' %}
+        </div>
+{% endblock content_admin %}
+  

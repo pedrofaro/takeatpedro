@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Takeat">
+        <meta name="author" content="Takeat">
+        <title>Takeat</title>
+        <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+        <link href="{% static "onshop_auto/css/auto_estilo.css" %}" rel="stylesheet">
+    {% block stylesheet %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+    {% endblock stylesheet %}
+    {% block head_javascript %}
+    {% endblock head_javascript %}
+    </head>
+    {% block body_sistema %}
+    <body>
+    {% endblock body_sistema %}
+    {% block body %}
+    <div id="container">
+        {% comment %}
+        <div id="header">
+            <ul class="header_fluxo_pedido">
+                
+            </ul>
+        </div>
+        {% endcomment %}
+        <div class="content principal">
+            <div class="boas_vindas">Bem-vindo(a) à</div>
+            <div class="boas_vindas_estabelecimento">{{ estabelecimento }}</div>
+            <div class="escolha_opcao">Escolha uma opção de atendimento.</div>
+            <div class="btn_delivery"> <!-- TODO: Mesma coisa que o anterior -->
+                <a href="{% url 'onshop_core:cardapio_inicial' %}">Delivery / Retirada</a>
+            </div>
+            <div class="btn_autoatendimento"> {% comment%} <!-- TODO: controle de autoatendimento ATIVO/DESATIVADO -->{% endcomment %}
+                <a href="{% url 'onshop_auto:acessar_autoatendimento' %}">Autoatendimento</a>
+            </div>
+            {% comment %}
+            <div class="divider"></div>
+            <div class="dados_estabelecimento">
+                <p>Horário de funcionamento</p>
+                <p>Todos os dias de Xh às Yh</p>
+                <p>Contato: </p>
+            </div>
+            {% endcomment %}
+        </div>
+
+        {% comment %}<div id="footer">
+            <div id="container_compra" class="tela_principal">
+                <p>Orgulhosamente desenvolvido por Takeat</p>
+                
+                <div class="botao_voltar_tela">
+                    
+                </div>
+                <div class="botao_fechar_pedido">
+                    <label for="submit-form" tabindex="0">Continuar</label>
+                </div>
+                
+            </div>
+        </div>{% endcomment %}
+        
+    </div><!-- Fim de Container -->
+
+    {% endblock body %}
+    {% block javascript_base %}
+    {% endblock javascript_base %}
+    {% block tail_javascript %}
+    {% endblock tail_javascript %}
+    {% block analytics %}
+    {% endblock analytics %}
+    </body>
+</html>

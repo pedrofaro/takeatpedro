@@ -1,0 +1,136 @@
+{% extends "onshop_core/index.html" %}
+{% load static %}
+
+
+
+{% block breadcrumb %}
+<ol class="breadcrumb">
+  <li><a href="{% url 'onshop_core:administrativo' %}">Painel Administrativo</a></li>
+  <li><a class="active">Configurações</a></li>
+  <li><a href="javascript:;" data-toggle="modal" data-target="#confirmModal">Sair</a></li>
+
+</ol>
+{% endblock breadcrumb %}
+
+
+  {% block menu_admin %}
+  <div class="navbar navbar-inverse" role="navigation">
+      <div class="navbar-header">
+        <div class="logo"><h1>Takeat - Painel de Administração</h1></div>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button> 
+      </div>   
+    </div>
+    <div class="template-page-wrapper">
+      <div class="navbar-collapse collapse templatemo-sidebar">
+        <ul class="templatemo-sidebar-menu">
+          <li><a href="{% url 'onshop_core:administrativo' %}"><i class="fa fa-home"></i>Painel</a></li>
+          <li class="sub open">
+          <a href="javascript:;">
+          <i class="fa fa-cog"></i>Configurações <div class="pull-right"><span class="caret"></span>
+          </div>
+            </a>
+            <ul class="templatemo-submenu">
+              <li><a href="{% url 'onshop_core:config_perfil' %}">Perfil</a></li>
+              <li><a href="{% url 'onshop_core:config_estabelecimento' %}">Estabelecimento</a></li>
+              <li><a href="{% url 'onshop_core:ver_bairros' %}">Bairros Atendidos</a></li>
+              <li><a href="{% url 'onshop_core:config_push' %}">Notificação PUSH</a></li>
+            </ul>
+          </li>
+
+          <li><a href="javascript:;" data-toggle="modal" data-target="#confirmModal"><i class="fas fa-sign-out-alt"></i>Sair</a></li>
+        </ul>
+      </div><!--/.navbar-collapse -->
+      {% endblock menu_admin %}
+
+
+      {% block content_admin %}
+          <h1>Configurações</h1>
+          <p class="margin-bottom-15">Informações sobre o Estabelecimento.</p>
+          <div class="row">
+            <div class="col-md-12">
+              <form method="post" role="form" id="templatemo-preferences-form" novalidate>
+                <div class="row">
+                  <div class="col-md-12 margin-bottom-15">
+                    <label for="{{ form.nome.id_for_label }}" class="control-label">Nome do Estabelecimento</label>
+                    {{ form.nome }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 margin-bottom-15">
+                    <label for="{{ form.endereco.id_for_label }}" class="control-label">Endereço</label>
+                    {{ form.endereco }}
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12 margin-bottom-15">
+                    <label for="{{ form.telefone.id_for_label }}" class="control-label">Telefone</label>
+                    {{ form.telefone }}
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12 margin-bottom-15">
+                    <label for="{{ form.observacao.id_for_label }}" class="control-label">Observações de Pagamento. (Ex: Aceitamos/não aceitamos cartões das bandeiras...)</label>
+                    {{ form.observacao }}
+                  </div>
+                </div>
+                  
+                <div class="row">
+                  <div class="col-md-6 margin-bottom-15">
+                    <label for="password_1">Horário de Abertura</label>
+                      <div class='input-group date' id='datetimepicker3'>
+                        {{ form.horario_abertura }}
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                      </div>
+                  </div>
+                  <div class="col-md-6 margin-bottom-15">
+                    <label for="password_2">Horário de Fechamento</label>
+                    <div class='input-group date' id='datetimepicker3'>
+                        {{ form.horario_fechamento }}
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                      </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 margin-bottom-15">
+                    <label for="{{ form.tempo_espera.id_for_label }}" class="control-label">Tempo Médio de Espera no Delivery</label>
+                    {{ form.tempo_espera }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 margin-bottom-15">
+                    <label for="{{ form.pedido_minimo.id_for_label }}" class="control-label">Pedido Mínimo do Delivery</label>
+                    {{ form.pedido_minimo }}
+                  </div>
+                </div>                
+                {% csrf_token %}
+              <div class="row templatemo-form-buttons">
+                <div class="col-md-12">
+                  <button type="submit" class="btn btn-primary">Salvar</button>
+                  <button type="reset" class="btn btn-default">Cancelar</button>    
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+{% endblock content_admin %}
+
+{% block js_footer %}
+<script src="{% static "onshop_core/js/jquery.timepicker.js" %}"></script>
+
+<script>
+          $(document).ready(function(){
+            $('#id_horario_abertura').timepicker();
+          }
+</script>
+{% endblock js_footer %}

@@ -1,0 +1,92 @@
+{% extends "onshop_core/novos_pedidos.html" %}
+
+      {% block content_admin %}
+          <h1>Pedidos</h1>
+          <p class="margin-bottom-15">Verifique os Pedidos realizados em sua plataforma.</p>
+          <div class="row margin-bottom-30">
+            <div class="col-md-12">
+              <ul class="nav nav-pills">
+                <li class="active">
+                  <a href="#">
+                    Pedido - #{{ pedido.id }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="btn-group pull-right" id="templatemo_sort_btn">
+                <button type="button" class="btn btn-default">Ordenar por</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Nome</a></li>
+                  <li><a href="#">Ícone</a></li>
+                </ul>
+              </div>
+              <div class="table-responsive">
+                <h4 class="margin-bottom-15">Pedido</h4>
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Comprador</th>
+                      <th>Hora da Compra</th>
+                      <th>Quantidade de Itens</th>
+                      <th>Total Pedido</th>
+                      <th>Imprimir</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="{% cycle '' 'success' %}">
+                      <td>{{ pedido.id }}</td>
+                      <td>{{ pedido.comprador.nome }} {{ pedido.comprador.sobrenome }} </td>
+                      <td>{{ pedido.hora_criacao|date:'H:i - d/m' }}</td>
+                      <td>{{ pedido.quantidade_itens }}</td>
+                      <td>R$ {{ pedido.total }}</td>
+                      <td>
+                          {% comment %}<a target="blank" href="{% url 'onshop_core:imprimir_comanda' pedido.id %}" class="btn btn-default">Imprimir Pedido</a> {% endcomment %}
+                          <a target="blank" href="{% url 'onshop_core:imprimir_comanda_alternativa' pedido.id %}" class="btn btn-default">Imprimir Pedido</a> 
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="6">Pedido Especial: {% if pedido.especial %}{{ pedido.especial }}{% else %} ---------- {% endif %}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Produto</th>
+                      <th>Quantidade</th>
+                      <th>Observações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for produto in pedido.produtos.all %}
+                    <tr class="{% cycle '' 'success' %}">
+                      <td>{{ produto.produto }}</td>
+                      <td>{{ produto.quantidade }}</td>
+                      <td>{{ produto.complemento|safe }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="row templatemo-form-buttons espaco_footer">
+                <div class="col-md-12">
+                  <a href="{% url 'onshop_core:pedidos_andamento' %}"><button type="submit" class="btn btn-primary">Voltar</button></a>
+                  <a href="{% url 'onshop_core:finalizar_pedido' pedido.id %}"><button type="submit" class="btn btn-danger">Marcar como Atendido</button></a>
+                </div>
+              </div>
+          </div>
+          {% endblock 'area_form' %}
+        </div>
+{% endblock content_admin %}
+  

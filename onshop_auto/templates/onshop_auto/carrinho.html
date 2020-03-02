@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="OnShop">
+        <meta name="author" content="OnShop">
+        <title>OnShop</title>
+        <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+    {% block stylesheet %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    {% endblock stylesheet %}
+    {% block head_javascript %}
+    {% endblock head_javascript %}
+    </head>
+    {% block body_sistema %}
+    <body>
+    {% endblock body_sistema %}
+    {% block body %}
+    <div id="container">
+        <div id="header">
+            <h1>{{ estabelecimento.nome }}</h1>
+        </div>
+        <div class="content fluxo_pedido">
+            <p class="carrinho"><i class="fas fa-shopping-bag"></i></p>
+            {% if pedido.produtos.all %}
+                {% for produto in pedido.produtos.all %}
+                <div class="produto_pedido">
+                    <p class="produto_quantidade">{{ produto.quantidade }} x</p>
+                    <p class="nome_pedido">{{ produto.produto.nome }}</p>
+                    <p class="preco_pedido">R$ {{ produto.total }}&nbsp;&nbsp;&nbsp;<a class="remover_pedido" href="{% url 'onshop_auto:remover_pedido_carrinho' pedido.id produto.id 1 %}"> </a></p>
+                </div>
+                {% endfor %}
+                <div class="total">
+                    <p>Total</p>
+                    <p>R$ {{ pedido.total }}</p>
+                </div>
+            {% else %}
+            <div>
+                <p class="mensagem_conf_car">Você está sem pedido! :(</p>
+            </div>
+            {% endif %}
+        </div>
+        <div id="footer">
+            <div id="container_compra">
+                <div class="botao_voltar_tela">
+                    <a href="{% url 'onshop_auto:acessar_autoatendimento' %}">Voltar</a>
+                </div>
+                <div class="botao_fechar_pedido">
+                    {% if pedido.quantidade_itens or pedido.total %}
+                    <a href="{% url 'onshop_auto:contato' %}">Fazer Pedido</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div><!-- Fim de Container -->
+
+    {% endblock body %}
+    {% block javascript_base %}
+    {% endblock javascript_base %}
+    {% block tail_javascript %}
+    <script>
+    function OpenTab(evt, nomeaba) {
+    var i;
+    var x = document.getElementsByClassName("resultado_abas");
+        for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("btn_opcao");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" ativo", "");
+    }
+    document.getElementById(nomeaba).style.display = "block";
+    evt.currentTarget.className += " ativo";
+    }
+    </script>
+    {% endblock tail_javascript %}
+    {% block analytics %}
+    {% endblock analytics %}
+    </body>
+</html>

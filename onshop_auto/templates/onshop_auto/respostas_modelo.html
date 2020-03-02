@@ -1,0 +1,64 @@
+{% extends "onshop_auto/ver_lista_complementos_modelo.html" %}
+
+      {% block content_admin %}
+          <h1>Perguntas Complementares Autoatendimento</h1>
+          <p class="margin-bottom-15">Gerencie as Perguntas do Modelos que poderão ser atribuídas aos produtos aqui.</p>
+          <div class="row">
+            <div class="col-md-12">
+              <tbody>
+                    <tr class="success">
+                      <td>{{ complemento.nome_modelo }}</td>
+                      <td><a href="{% url 'onshop_auto:editar_complementos_auto' complemento.id %}" class="btn btn-default">Editar</a></td>
+                      <td>{{ pergunta.pergunta }}</td>
+                    </tr>
+              </tbody>
+            </div>
+          </div>
+          
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="btn-group pull-right" id="templatemo_sort_btn">
+                <button type="button" class="btn btn-default">Ordenar por</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Categoria</a></li>
+                  <li><a href="#">Preço</a></li>
+                </ul>
+              </div>
+              <div class="table-responsive">
+                <h4 class="margin-bottom-15">Respostas</h4>
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Resposta</th>
+                      <th>Preço Adicional</th>
+                      <th>Editar</th>
+                      <th>Deletar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for resposta in respostas %}
+                    <tr class="{% cycle '' 'success' %}">
+                      <td>{{ resposta.resposta }}</td>
+                      <td>{{ resposta.preco_adicional }}</td>
+                      <td><a href="{% url 'onshop_auto:editar_resposta_modelo_auto' pergunta.id resposta.id %}" class="btn btn-default">Editar</a></td>
+                      <td><a href="{% url 'onshop_auto:deletar_resposta_modelo_auto' resposta.id %}" class="btn btn-link">Deletar</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="row templatemo-form-buttons espaco_footer">
+                <div class="col-md-12">
+                  <a href="{% url 'onshop_auto:ver_lista_complemento_auto' complemento.id %}"><button type="submit" class="btn btn-reset">Voltar</button></a>
+                  <a href="{% url 'onshop_auto:adicionar_resposta_modelo_auto' pergunta.id %}"><button type="submit" class="btn btn-primary">Adicionar Resposta</button></a>
+                </div>
+              </div>
+          </div>
+          {% endblock 'area_form' %} 
+        </div>
+{% endblock content_admin %}

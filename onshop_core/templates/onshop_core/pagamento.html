@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="OnShop">
+        <meta name="author" content="OnShop">
+        <title>OnShop</title>
+        <link href="{% static "onshop_core/css/estilo.css" %}" rel="stylesheet">
+    {% block stylesheet %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+    {% endblock stylesheet %}
+    {% block head_javascript %}
+    {% endblock head_javascript %}
+    </head>
+    {% block body_sistema %}
+    <body>
+    {% endblock body_sistema %}
+    {% block body %}
+    <div id="container">
+        <div id="header">
+            <ul class="header_fluxo_pedido">
+                <li class="circulo">1</li>
+                <li class="circulo">2</li>
+                <li>&raquo;</li>
+                <li class="circulo">3</li>
+                <li class="nome_fluxo">Pagamento</li>
+                <li>&raquo;</li>
+                <li class="circulo">4</li>
+            </ul>
+        </div>
+        <div class="content pagamento">
+            <div class="header_total">
+                <p class="frase_total">Total</p>
+                <p class="total_pedido">R$ {{ total }}</p>
+            </div>
+            <div class="opcoes_pagamentos">
+                <a onclick="EscolhaOption(event, 'dinheiro')" href="#" class="pgto_opcao">
+                    <div class="escolha">
+                        <p class="icn_dinheiro">Dinheiro</p>
+                        <p>R$ {{ total }}</p>
+                    </div>
+                </a>
+                <a onclick="EscolhaOption(event, 'cartao')" href="#" class="pgto_opcao">
+                    <div class="escolha">
+                        <p class="icn_cartao">Cartão - Pagar na Entrega</p>
+                        <p>R$ {{ total }}</p>
+                    </div>
+                </a>
+                {% if observacao %}<p class="pagamento_observacao">{{ observacao }}</p>{% endif %}
+                <div class="troco" style="display: none;">
+                    <form id="form_troco" meio="" method="post">
+                        <label>Necessita de troco para quanto?</label>
+                        <input type="text" name="troco_field" />
+                        <input type="submit" id="submit-form" class="hidden" />
+                        {% csrf_token %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <div id="container_compra">
+                <div class="botao_voltar_tela">
+                    <a href="{% url 'onshop_core:contato' %}">Voltar</a>
+                </div>
+                <div class="botao_fechar_pedido">
+                </div>
+            </div>
+        </div>
+    </div><!-- Fim de Container -->
+
+    {% endblock body %}
+    {% block javascript_base %}
+    <script src="{% static "onshop_core/js/jquery.min.js" %}"></script>
+    {% endblock javascript_base %}
+    {% block tail_javascript %}
+    <script>
+    function EscolhaOption(evt, nomeaba) {
+        var i;
+        tablinks = document.getElementsByClassName("pgto_opcao");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" ativo", "");
+        }
+        //document.getElementById(nomeaba).style.display = "block";
+        evt.currentTarget.className += " ativo";
+        if (nomeaba == 'dinheiro'){
+            document.getElementsByClassName("troco")[0].style.display = "block";
+            document.getElementsByClassName("botao_fechar_pedido")[0].innerHTML = "<label class=" + "btn_fechar" + " for=" +"submit-form" + " tabindex=" +"0"+ ">Continuar</label>"
+            document.getElementById("form_troco").setAttribute("url", "{% url 'onshop_core:setar_pagamento' 'dinheiro' %}");
+
+        }else if (nomeaba == 'cartao'){
+            document.getElementsByClassName("troco")[0].style.display = "none";
+            document.getElementById("form_troco").reset();
+            document.getElementById("form_troco").setAttribute("url", "{% url 'onshop_core:setar_pagamento' 'cartao' %}");            
+            document.getElementsByClassName("botao_fechar_pedido")[0].innerHTML = "<label class=" + "btn_fechar" + " for=" +"submit-form" +" tabindex="+"0"+ ">Continuar</label>"
+
+        };
+    };
+    </script>
+    {% endblock tail_javascript %}
+<script>
+        $('#form_troco').submit(function(event) {
+            event.preventDefault();
+            //console.log($(this));
+            //console.log('funfando');
+            //Aqui entra o AJAX
+            //var _this = $(this);
+            //var id = _this.attr("js-produto-id");
+            //var csrfmiddlewaretoken = $("[name=csrfmiddlewaretoken]").val();
+            //console.log(csrfmiddlewaretoken);
+            //console.log(id)
+//            var id = $('.produtoid').val();
+            //console.log($(this).attr('meio'));
+            var formData = $(this).serializeArray();
+            formData = JSON.stringify(formData);
+            //console.log(formData);
+            
+            //len = formData.length;
+            //dataObj = {};
+            //for(i=0; i<len; i++){
+            //    dataObj[formData[i].name] = formData[i].value;
+            //};
+            $.ajax({
+                url: $(this).attr('url'),
+                type: "get",
+                datatype: "json",
+                data: {
+                    'formData': formData
+                },
+                success: function(data){
+                    //$('.modal_simples').css("display", "none");
+                    //$('.modal-produto').html("");
+                    //console.log(data);
+                    //$('#footer').find('.quantidade').html("<a href='{% url 'onshop_core:ver_carrinho' %}'><p>" + data['quantidade'] + "</p><p>&nbsp;( R$ " + data['total']+" )</p></a>");
+                    $(location).attr('href', '{% url 'onshop_core:confirmacao' %}');
+                },
+                error: function(err){
+                    console.log('error', err);
+                }
+            })
+        });
+    </script>
+
+    {% block analytics %}
+    {% endblock analytics %}
+    </body>
+</html>

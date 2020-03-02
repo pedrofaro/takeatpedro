@@ -1,0 +1,31 @@
+{% extends "onshop_core/preferences.html" %}
+
+
+
+      {% block content_admin %}
+          <h1>Notificação PUSH</h1>
+          <p class="margin-bottom-15">Configurações da Conta de Notificação PUSH.</p>
+          <div class="row">
+            <div class="col-md-12">
+              <form method="post" role="form" id="templatemo-preferences-form">
+                <div class="row">
+                  <div class="col-md-12 margin-bottom-15">
+                    <label id="{{ form.email.id_for_label }}" class="control-label">APP ID</label>
+                    {{ form.app_id }}
+                  </div>
+                  <div class="col-md-12 margin-bottom-15">
+                    <label id="{{ form.email.id_for_label }}" class="control-label">Authorization</label>
+                    {{ form.authorization }}
+                  </div>
+                </div>
+                {% csrf_token %}
+              <div class="row templatemo-form-buttons">
+                <div class="col-md-12">
+                  <button type="submit" class="btn btn-primary">Salvar</button>
+                  <button type="reset" class="btn btn-default">Cancelar</button>    
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+{% endblock content_admin %}

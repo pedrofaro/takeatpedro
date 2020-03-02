@@ -1,0 +1,103 @@
+{% extends "onshop_core/index.html" %}
+
+
+{% block breadcrumb %}
+<ol class="breadcrumb">
+  <li><a href="{% url 'onshop_core:administrativo' %}">Painel Administrativo</a></li>
+  <li><a class="active">Complementos</a></li>
+  <li><a href="sign-in.html">Sair</a></li>
+</ol>
+{% endblock breadcrumb %}
+
+
+      {% block content_admin %}
+          <h1>Perguntas Complementares</h1>
+          <p class="margin-bottom-15">Gerencie as Perguntas do Modelos que poderão ser atribuídas aos produtos aqui.</p>
+          <div class="row">
+            <div class="col-md-12">
+              <tbody>
+                    <tr class="success">
+                      <td>{{ complemento.nome_modelo }}</td>
+                      <td><a href="{% url 'onshop_core:editar_complementos' complemento.id %}" class="btn btn-default">Editar</a></td>
+                    </tr>
+              </tbody>
+            </div>
+          </div>
+          
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="btn-group pull-right" id="templatemo_sort_btn">
+                <button type="button" class="btn btn-default">Ordenar por</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Categoria</a></li>
+                  <li><a href="#">Preço</a></li>
+                </ul>
+              </div>
+              <div class="table-responsive">
+                <h4 class="margin-bottom-15">Perguntas</h4>
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Pergunta</th>
+                      <th>Tipo</th>
+                      <th>Limite</th>
+                      <th>Respostas</th>
+                      <th>Editar</th>
+                      <th>Deletar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for pergunta in perguntas %}
+                    <tr class="{% cycle '' 'success' %}">
+                      <td>{{ pergunta.pergunta }}</td>
+                      <!-- <td>{{ pergunta.get_respostas }}</td>-->
+                      <td>
+                        {% for choice in pergunta.RESPOSTAS %}
+                          {% ifequal pergunta.tipo choice.0 %}
+                            {{ choice.1 }}
+                          {% endifequal %}
+                        {% endfor %}
+                      </td>
+                      <td>{{ pergunta.limite }}</td>
+                      <td><a href="{% url 'onshop_core:ver_respostas_modelo' pergunta.id %}" class="btn btn-default">Gerenciar</a></td>
+                      <td><a href="{% url 'onshop_core:editar_pergunta_modelo' complemento.id pergunta.id %}" class="btn btn-default">Editar</a></td>
+                      <td><a href="#" class="btn btn-link">Deletar</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="row templatemo-form-buttons espaco_footer">
+                <div class="col-md-12">
+                  <a href="{% url 'onshop_core:ver_complementos' %}"><button type="submit" class="btn btn-reset">Voltar</button></a>
+                  <a href="{% url 'onshop_core:adicionar_pergunta_modelo' complemento.id %}"><button type="submit" class="btn btn-primary">Adicionar Pergunta</button></a>
+                  <a href="{% url 'onshop_core:atribuir_produtos' complemento.id %}"><button type="submit" class="btn btn-success">Atribuir a Produto</button></a>
+                </div>
+              </div>
+
+              <form role="form" id="templatemo-preferences-form" method="post" enctype="multipart/form-data">
+                  <div class="row">
+                    <div class="col-md-12 margin-bottom-15">
+                      <label for="{{ form.produtos.id_for_label }}" class="control-label">Produtos</label>
+                      {{ form.produtos }}
+                      {{ form.produtos.errors }}
+                    </div>
+                  </div>
+                  {% csrf_token %}
+                  <div class="row templatemo-form-buttons">
+                    <div class="col-md-12">
+                      <button type="submit" class="btn btn-primary">Salvar</button>
+                      <button type="reset" class="btn btn-default">Limpar</button>
+                    </div>
+                  </div>
+                </form>
+          </div>
+          {% endblock 'area_form' %}
+        </div>
+{% endblock content_admin %}
+  

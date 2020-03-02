@@ -1,0 +1,35 @@
+{% extends "onshop_core/respostas_modelo.html" %}
+
+
+          
+          {% block 'area_form' %}
+          <div class="row">
+            <div class="col-md-12">
+            <form role="form" id="templatemo-preferences-form" method="post" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-12 margin-bottom-15">
+                  <label for="{{ form.resposta.id_for_label }}" class="control-label">Resposta</label>
+                  {{ form.resposta }}
+                  {{ form.resposta.errors }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 margin-bottom-15">
+                  <label for="{{ form.preco_adicional.id_for_label }}" class="control-label">Preço Adicional</label>
+                  {{ form.preco_adicional }}
+                  {{ form.preco_adicional.errors }}
+                </div>
+              </div>
+              {% csrf_token %}
+              <div class="row templatemo-form-buttons">
+                <div class="col-md-12">
+                  <button type="submit" class="btn btn-primary">Salvar</button>
+                  <button type="reset" class="btn btn-default">Limpar</button>
+                </div>
+              </div>
+            </form>
+            {{ form.error }}
+          </div>
+        </div>
+          {% endblock 'area_form' %}
+  
