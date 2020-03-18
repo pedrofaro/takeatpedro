@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="645bbb33-e84c-4990-9cb8-9a6764cb3d64" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onshop/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/onshop/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onshop/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/onshop/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chefsburger" beforeDir="false" afterPath="$PROJECT_DIR$/chefsburger" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

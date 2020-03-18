@@ -20,6 +20,8 @@
         {%endfor%}
     </div>
 
+    {%for categoria in categoria%}
+    <h3>{{categoria.nome}}</h3>
     <table class="table container clearfix col-md-6 configdiv">
         <thead>
             <tr>
@@ -30,12 +32,15 @@
         </thead>
         <tbody>
             {% for produto, count, count_preco in lista %}
+                {% if produto.categoria == categoria %}
                 <tr>
                     <td scope="row">{{count}}</td>
                     <td scope="row">{{produto.nome}}</td>
                     <td scope="row">{{count_preco}}</td>
                 </tr>
+                {%endif%}
             {%endfor%}
         </tbody>
     </table>
+    {%endfor%}
 {% endblock content_admin %}

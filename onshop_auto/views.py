@@ -719,6 +719,7 @@ def imprimir_qrcode(request, id_mesa):
 def relatorio_por_produto(request):
     pedidos = ItemPedidoAuto.objects.all()
     produtos = ProdutoAuto.objects.all()
+    categoria = CategoriaAuto.objects.all()
 
     data_max = request.GET.get('date_template_max')
     data_min = request.GET.get('date_template_min')
@@ -739,12 +740,12 @@ def relatorio_por_produto(request):
         count_preco = 0
         for pedido in pedidos:
             if produto == pedido.produto:
-                count = count + 1
-                count_preco = count_preco + pedido.preco_produto
+                count = count + pedido.quantidade
+                count_preco = count_preco + (pedido.quantidade * pedido.preco_produto)
         if not count == 0:
             lista.append([produto, count, count_preco])
 
-    return render(request, 'onshop_auto/relatorio_por_produto.html', {'lista': lista, 'dataa': data_filtro})
+    return render(request, 'onshop_auto/relatorio_por_produto.html', {'lista': lista, 'dataa': data_filtro, 'categoria': categoria})
 
 def sortThird(val):
     return val[3]
