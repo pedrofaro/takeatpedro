@@ -98,6 +98,10 @@ urlpatterns = [
 
     url(r'^analisa-pedido-auto/$', views.analisa_pedido_auto, name='analisa_pedido_auto'), #Chamada ajax para analisar se pode ser feito o pedido
 
+
+    #Relatórios
+    url(r'^relatorio-por-produto/$', views.relatorio_por_produto, name='relatorio_por_produto'), #Relatórios por Produtos - Pedro 17/03/2020
+
     # Garcons
     url(r'^painel/garcons/$', views.ver_garcons, name='ver_garcons_auto'),
     url(r'^painel/garcons/editar/$', views.editar_garcons, name='adicionar_garcons_auto'),

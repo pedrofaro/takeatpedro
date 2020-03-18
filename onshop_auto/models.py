@@ -7,7 +7,7 @@ from django.core.files.base import ContentFile
 
 from PIL import Image
 try:
-    from StringIO import StringIO
+    from StringIO import String
 except ImportError:
     from io import StringIO
 

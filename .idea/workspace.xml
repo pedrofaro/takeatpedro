@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="645bbb33-e84c-4990-9cb8-9a6764cb3d64" name="Default Changelist" comment="" />
+    <list default="true" id="645bbb33-e84c-4990-9cb8-9a6764cb3d64" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onshop/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/onshop/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onshop/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/onshop/settings.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,6 +18,9 @@
         <option value="HTML File" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1Y2lJJfUMPhxutMj7GD5b9tpSdy" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -48,14 +56,18 @@
       <screen x="67" y="27" width="1299" height="741" />
     </state>
     <state x="174" y="54" key="#com.intellij.execution.impl.EditConfigurationsDialog/67.27.1299.741@67.27.1299.741" timestamp="1582281959120" />
-    <state x="372" y="224" key="com.intellij.ide.util.TipDialog" timestamp="1582280941247">
+    <state x="372" y="224" key="com.intellij.ide.util.TipDialog" timestamp="1584532845213">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state x="372" y="224" key="com.intellij.ide.util.TipDialog/67.27.1299.741@67.27.1299.741" timestamp="1582280941247" />
+    <state x="372" y="224" key="com.intellij.ide.util.TipDialog/67.27.1299.741@67.27.1299.741" timestamp="1584532845213" />
     <state x="379" y="89" width="672" height="678" key="search.everywhere.popup" timestamp="1582248076248">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
     <state x="379" y="89" width="672" height="678" key="search.everywhere.popup/67.27.1299.741@67.27.1299.741" timestamp="1582248076248" />
+    <state x="441" y="309" width="540" height="175" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1584536973091">
+      <screen x="67" y="27" width="1299" height="741" />
+    </state>
+    <state x="441" y="309" width="540" height="175" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/67.27.1299.741@67.27.1299.741" timestamp="1584536973091" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

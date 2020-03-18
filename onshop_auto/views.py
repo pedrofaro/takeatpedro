@@ -716,6 +716,36 @@ def imprimir_qrcode(request, id_mesa):
 # ------------ -------------------
 # Funções facilitadores de Mudança de Mesa e etc...
 
+def relatorio_por_produto(request):
+    pedidos = ItemPedidoAuto.objects.all()
+    produtos = ProdutoAuto.objects.all()
+
+    data_max = request.GET.get('date_template_max')
+    data_min = request.GET.get('date_template_min')
+
+    lista = []
+    data_filtro = []
+
+    data_filtro.append([data_min, data_max])
+
+    if data_min != '' and data_min is not None:
+        if data_max != '' and data_max is not None:
+            pedidos = pedidos.filter(hora_criacao__date__range = [data_min, data_max])
+        else:
+            pedidos = pedidos.filter(hora_criacao__date=data_min)
+
+    for produto in produtos:
+        count = 0
+        count_preco = 0
+        for pedido in pedidos:
+            if produto == pedido.produto:
+                count = count + 1
+                count_preco = count_preco + pedido.preco_produto
+        if not count == 0:
+            lista.append([produto, count, count_preco])
+
+    return render(request, 'onshop_auto/relatorio_por_produto.html', {'lista': lista, 'dataa': data_filtro})
+
 def sortThird(val):
     return val[3]
 
