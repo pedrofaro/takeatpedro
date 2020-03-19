@@ -1,7 +1,7 @@
 {% extends "onshop_core/index.html" %}
 
 {% block content_admin %}
-    <h2>Relatório por Produto</h2>
+<h2 xmlns:b="http://www.w3.org/1999/html">Relatório por Produto</h2>
 
     <div class="col-3">
         <form method="GET">
@@ -12,35 +12,69 @@
             <button type="submit">Buscar</button>
         </form>
         {% for data_min, data_max in dataa %}
-        {% if data_min is not None and data_min != '' and data_max is not None and data_max != ''%}
-            <span>Data de pesquisa: entre {{data_min}} e {{data_max}}</span>
-        {% else %}
-            <span>Data de pesquisa: {{data_min}} </span>
-        {% endif %}
+            {% if data_min is not None and data_min != '' and data_max is not None and data_max != ''%}
+                <span>Data de pesquisa: entre {{data_min}} e {{data_max}}</span>
+            {% else %}
+                <span>Data de pesquisa: {{data_min}} </span>
+            {% endif %}
         {%endfor%}
     </div>
 
-    {%for categoria in categoria%}
-    <h3>{{categoria.nome}}</h3>
-    <table class="table container clearfix col-md-6 configdiv">
-        <thead>
-            <tr>
-                <th scope="col">Quantidade</th>
-                <th scope="col">Produto</th>
-                <th scope="col">Total (R$)</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for produto, count, count_preco in lista %}
-                {% if produto.categoria == categoria %}
+    {%for categoria, count_categoria, count_categoria_preco, porcentagem_categoria, porcentagem_categoria_preco in categorias%}
+        <h3>{{categoria.nome}}</h3>
+        <table class="table container clearfix col-md-6 configdiv">
+            <thead>
                 <tr>
-                    <td scope="row">{{count}}</td>
-                    <td scope="row">{{produto.nome}}</td>
-                    <td scope="row">{{count_preco}}</td>
+                    <th scope="col">Produto</th>
+                    <th scope="col">Quantidade</th>
+                    <th scope="col">Total (R$)</th>
                 </tr>
-                {%endif%}
-            {%endfor%}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for produto, count, count_preco in lista %}
+                    {% if produto.categoria == categoria %}
+                    <tr>
+                        <td scope="row">{{produto.nome}}</td>
+                        <td scope="row">{{count}}</td>
+                        <td scope="row">{{count_preco}}</td>
+                    </tr>
+                    {%endif%}
+                {%endfor%}
+            </tbody>
+            <tbody>
+                 <tr>
+                     <td scope="row"><b>Total</b></td>
+                     <td scope="row"><b>{{count_categoria}}</b></td>
+                     <td scope="row"><b>{{count_categoria_preco}}</b></td>
+                 </tr>
+                <tr>
+                     <td scope="row"><b>Total (%)</b></td>
+                     <td scope="row"><b>{{porcentagem_categoria}}%</b></td>
+                     <td scope="row"><b>{{porcentagem_categoria_preco}}%</b></td>
+                 </tr>
+            </tbody>
+        </table>
     {%endfor%}
+    <h3>Total</h3>
+        <table class="table container clearfix col-md-6 configdiv">
+            <thead>
+                <tr>
+                    <th scope="col"> </th>
+                    <th scope="col">Quantidade</th>
+                    <th scope="col">Total (R$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                     <td scope="row"><b>Total</b></td>
+                     <td scope="row"><b>{{total_produto}}</b></td>
+                     <td scope="row"><b>{{total_preco_produto}}</b></td>
+                 </tr>
+                <tr>
+                     <td scope="row"><b>Total (%)</b></td>
+                     <td scope="row"><b>100%</b></td>
+                     <td scope="row"><b>100%</b></td>
+                 </tr>
+            </tbody>
+        </table>
 {% endblock content_admin %}

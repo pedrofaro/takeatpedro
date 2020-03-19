@@ -719,7 +719,7 @@ def imprimir_qrcode(request, id_mesa):
 def relatorio_por_produto(request):
     pedidos = ItemPedidoAuto.objects.all()
     produtos = ProdutoAuto.objects.all()
-    categoria = CategoriaAuto.objects.all()
+    categorias = CategoriaAuto.objects.all()
 
     data_max = request.GET.get('date_template_max')
     data_min = request.GET.get('date_template_min')
@@ -727,6 +727,7 @@ def relatorio_por_produto(request):
     lista = []
     data_filtro = []
 
+    #filtrando as datas
     data_filtro.append([data_min, data_max])
 
     if data_min != '' and data_min is not None:
@@ -735,6 +736,9 @@ def relatorio_por_produto(request):
         else:
             pedidos = pedidos.filter(hora_criacao__date=data_min)
 
+    #contando os produtos e o valor
+    total_produto = 0
+    total_preco_produto = 0
     for produto in produtos:
         count = 0
         count_preco = 0
@@ -743,9 +747,35 @@ def relatorio_por_produto(request):
                 count = count + pedido.quantidade
                 count_preco = count_preco + (pedido.quantidade * pedido.preco_produto)
         if not count == 0:
+            total_preco_produto = total_preco_produto + count_preco
+            total_produto = total_produto + count
             lista.append([produto, count, count_preco])
 
-    return render(request, 'onshop_auto/relatorio_por_produto.html', {'lista': lista, 'dataa': data_filtro, 'categoria': categoria})
+    lista_totais = [total_produto, total_preco_produto]
+
+    #fazendo as estatisticas
+    lista_totais_categoria = []
+
+    for categoria in categorias:
+        count_categoria = 0
+        count_categoria_preco = 0
+        for pedido in pedidos:
+            if pedido.produto.categoria == categoria:
+                count_categoria = count_categoria + pedido.quantidade
+                count_categoria_preco = count_categoria_preco + (pedido.quantidade * pedido.preco_produto)
+
+        porcentagem_categoria = count_categoria/total_produto * 100
+        porcentagem_categoria_preco = count_categoria_preco/total_preco_produto * 100
+
+        porcentagem_categoria = "%.2f" % (porcentagem_categoria)
+        porcentagem_categoria_preco = "%.2f" % (porcentagem_categoria_preco)
+
+        if not count_categoria == 0:
+            lista_totais_categoria.append([categoria, count_categoria, count_categoria_preco, porcentagem_categoria, porcentagem_categoria_preco])
+
+        print(lista_totais)
+
+    return render(request, 'onshop_auto/relatorio_por_produto.html', {'lista': lista, 'dataa': data_filtro, 'categorias': lista_totais_categoria, 'total_produto': total_produto, 'total_preco_produto': total_preco_produto })
 
 def sortThird(val):
     return val[3]
