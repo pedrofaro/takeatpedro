@@ -55,6 +55,40 @@
             </tbody>
         </table>
     {%endfor%}
+
+    <h3>Complementos</h3>
+        <table class="table container clearfix col-md-6 configdiv">
+            <thead>
+                <tr>
+                    <th scope="col">Complemento</th>
+                    <th scope="col">Quantidade</th>
+                    <th scope="col">Total (R$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for complemento, count_complemento, count_preco_complemento in complementos %}
+                    <tr>
+                        <td scope="row">{{complemento}}</td>
+                        <td scope="row">{{count_complemento}}</td>
+                        <td scope="row">{{count_preco_complemento}}</td>
+                    </tr>
+                {%endfor%}
+            </tbody>
+            <tbody>
+                 <tr>
+                     <td scope="row"><b>Total</b></td>
+                     <td scope="row"><b>{{total_complemento}}</b></td>
+                     <td scope="row"><b>{{total_preco_complemento}}</b></td>
+                 </tr>
+                <tr>
+                     <td scope="row"><b>Total (%)</b></td>
+                     <td scope="row"><b>{{porcentagem_complemento}}%</b></td>
+                     <td scope="row"><b>{{porcentagem_complemento_preco}}%</b></td>
+                 </tr>
+            </tbody>
+        </table>
+
+
     <h3>Total</h3>
         <table class="table container clearfix col-md-6 configdiv">
             <thead>
@@ -66,9 +100,14 @@
             </thead>
             <tbody>
                 <tr>
-                     <td scope="row"><b>Total</b></td>
+                     <td scope="row"><b>Total (s/ compl.)</b></td>
                      <td scope="row"><b>{{total_produto}}</b></td>
                      <td scope="row"><b>{{total_preco_produto}}</b></td>
+                 </tr>
+                <tr>
+                     <td scope="row"><b>Total (c/ compl.)</b></td>
+                     <td scope="row"><b>{{total_produto_com_complemento}}</b></td>
+                     <td scope="row"><b>{{total_preco_produto_com_complemento}}</b></td>
                  </tr>
                 <tr>
                      <td scope="row"><b>Total (%)</b></td>

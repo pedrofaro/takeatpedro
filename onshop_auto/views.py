@@ -753,8 +753,36 @@ def relatorio_por_produto(request):
 
     lista_totais = [total_produto, total_preco_produto]
 
-    #fazendo as estatisticas
+    #complementos
+    complementos = [] #apenas os complementos
+    for pedido in pedidos:
+        if pedido.complemento not in complementos and pedido.complemento != '':
+            complementos.append(pedido.complemento)
+
+    lista_complementos = [] #lista com complemente, total de vezes pedido e total arrecadado por complemento
+    lista_complementos_total = [] #lista com o valor total de vezes pedidos e total arrecadado de todos os complementos
+    count_complemento_total = 0
+    count_preco_complemento_total = 0
+
+    for complemento in complementos:
+        count_complemento = 0
+        count_preco_complemento = 0
+        for pedido in pedidos:
+            if complemento == pedido.complemento:
+                count_complemento = count_complemento + 1
+                count_preco_complemento = count_preco_complemento + pedido.adicional
+        if count_complemento != 0:
+            count_complemento_total = count_complemento_total + count_complemento
+            count_preco_complemento_total = count_preco_complemento_total + count_preco_complemento
+            lista_complementos.append([complemento, count_complemento, count_preco_complemento])
+
+    lista_complementos_total = [count_complemento_total, count_preco_complemento_total]
+
+    # fazendo as estatisticas
     lista_totais_categoria = []
+
+    total_produto_com_complemento = total_produto + count_complemento_total
+    total_preco_produto_com_complemento = total_preco_produto + count_preco_complemento_total
 
     for categoria in categorias:
         count_categoria = 0
@@ -764,18 +792,36 @@ def relatorio_por_produto(request):
                 count_categoria = count_categoria + pedido.quantidade
                 count_categoria_preco = count_categoria_preco + (pedido.quantidade * pedido.preco_produto)
 
-        porcentagem_categoria = count_categoria/total_produto * 100
-        porcentagem_categoria_preco = count_categoria_preco/total_preco_produto * 100
+        porcentagem_categoria = count_categoria / total_produto_com_complemento * 100
+        porcentagem_categoria_preco = count_categoria_preco / total_preco_produto_com_complemento * 100
 
         porcentagem_categoria = "%.2f" % (porcentagem_categoria)
         porcentagem_categoria_preco = "%.2f" % (porcentagem_categoria_preco)
 
         if not count_categoria == 0:
-            lista_totais_categoria.append([categoria, count_categoria, count_categoria_preco, porcentagem_categoria, porcentagem_categoria_preco])
+            lista_totais_categoria.append(
+                [categoria, count_categoria, count_categoria_preco, porcentagem_categoria, porcentagem_categoria_preco])
 
-        print(lista_totais)
+    porcentagem_complemento = count_complemento_total / total_produto_com_complemento * 100
+    porcentagem_complemento_preco = count_preco_complemento_total / total_preco_produto_com_complemento * 100
 
-    return render(request, 'onshop_auto/relatorio_por_produto.html', {'lista': lista, 'dataa': data_filtro, 'categorias': lista_totais_categoria, 'total_produto': total_produto, 'total_preco_produto': total_preco_produto })
+    porcentagem_complemento = "%.2f" % (porcentagem_complemento)
+    porcentagem_complemento_preco = "%.2f" % (porcentagem_complemento_preco)
+
+    print(lista_complementos_total)
+
+    return render(request, 'onshop_auto/relatorio_por_produto.html', {'lista': lista,
+                                                                      'dataa': data_filtro,
+                                                                      'categorias': lista_totais_categoria,
+                                                                      'total_produto_com_complemento': total_produto_com_complemento,
+                                                                      'total_preco_produto_com_complemento': total_preco_produto_com_complemento,
+                                                                      'total_produto': total_produto,
+                                                                      'total_preco_produto': total_preco_produto,
+                                                                      'complementos': lista_complementos,
+                                                                      'total_complemento': count_complemento_total,
+                                                                      'porcentagem_complemento': porcentagem_complemento,
+                                                                      'porcentagem_complemento_preco': porcentagem_complemento_preco,
+                                                                      'total_preco_complemento': count_preco_complemento_total})
 
 def sortThird(val):
     return val[3]
