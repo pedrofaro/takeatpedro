@@ -101,6 +101,7 @@ urlpatterns = [
 
     #Relatórios
     url(r'^relatorio-por-produto/$', views.relatorio_por_produto, name='relatorio_por_produto'), #Relatórios por Produtos - Pedro 17/03/2020
+    url(r'^relatorio-de-clientes/$', views.relatorio_de_clientes, name='relatorio_de_clientes'), #Relatórios de Clientes - Pedro 24/03/2020
 
     # Garcons
     url(r'^painel/garcons/$', views.ver_garcons, name='ver_garcons_auto'),

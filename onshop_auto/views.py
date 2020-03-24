@@ -823,6 +823,56 @@ def relatorio_por_produto(request):
                                                                       'porcentagem_complemento_preco': porcentagem_complemento_preco,
                                                                       'total_preco_complemento': count_preco_complemento_total})
 
+def relatorio_de_clientes(request):
+    pedidos = ItemPedidoAuto.objects.all()
+    compradores = CompradorPedidoAuto.objects.all()
+
+    data_max = request.GET.get('date_template_max')
+    data_min = request.GET.get('date_template_min')
+    tzutc = pytz.UTC
+
+    data_filtro = []
+
+    # filtrando as datas
+    data_filtro.append([data_min, data_max])
+
+    if data_min != '' and data_min is not None:
+        if data_max != '' and data_max is not None:
+            pedidos = pedidos.filter(hora_criacao__date__range=[data_min, data_max])
+        else:
+            pedidos = pedidos.filter(hora_criacao__date=data_min)
+
+    clientes = []
+    garcons = []
+
+    for comprador in compradores:
+        if comprador.telefone[0] == "(":
+            if comprador.telefone not in clientes:
+                clientes.append(comprador.telefone)
+        else:
+            if comprador.telefone not in garcons:
+                garcons.append(comprador.telefone)
+
+    cliente_total = []
+
+    for cliente in clientes:
+        count_total_cliente = 0 #total $ consumido
+
+        data_ultima_visita = datetime(2020, 1, 1, 0, 0, 0)
+        data_ultima_visita = data_ultima_visita.replace(tzinfo=pytz.UTC)
+
+        for pedido in pedidos:
+            if pedido.comprador.telefone == cliente:
+                count_total_cliente = count_total_cliente + pedido.total
+                if data_ultima_visita < pedido.hora_criacao:
+                    data_ultima_visita = pedido.hora_criacao
+
+        if count_total_cliente !=0:
+            cliente_total.append([cliente, count_total_cliente, data_ultima_visita.strftime('%d/%m/%Y')])
+
+
+    return render(request, 'onshop_auto/relatorio_de_clientes.html', {'datas': data_filtro, 'clientes': cliente_total, 'garcons':garcons})
+
 def sortThird(val):
     return val[3]
 

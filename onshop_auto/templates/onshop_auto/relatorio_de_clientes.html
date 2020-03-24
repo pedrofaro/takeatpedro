@@ -1,0 +1,42 @@
+{% extends "onshop_core/index.html" %}
+
+{% block content_admin %}
+<h2 xmlns:b="http://www.w3.org/1999/html">Relatório de Clientes</h2>
+
+    <div class="col-3">
+        <form method="GET">
+            <span>Data: entre </span>
+            <input type="date" name="date_template_min">
+            <span>e</span>
+            <input type="date" name="date_template_max">
+            <button type="submit">Buscar</button>
+        </form>
+        {% for data_min, data_max in datas %}
+            {% if data_min is not None and data_min != '' and data_max is not None and data_max != ''%}
+                <span>Data de pesquisa: entre {{data_min}} e {{data_max}}</span>
+            {% else %}
+                <span>Data de pesquisa: {{data_min}} </span>
+            {% endif %}
+        {%endfor%}
+    </div>
+
+    <table class="table container clearfix col-md-6 configdiv">
+        <thead>
+            <tr>
+                <th scope="col">Cliente</th>
+                <th scope="col">Total (R$)</th>
+                <th scope="col">Última visita</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for cliente, count_total_cliente, data_ultima_visita in clientes%}
+                <tr>
+                    <td scope="row">{{cliente}}</td>
+                    <td scope="row">{{count_total_cliente}}</td>
+                    <td scope="row">{{data_ultima_visita}}</td>
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+{% endblock content_admin %}
