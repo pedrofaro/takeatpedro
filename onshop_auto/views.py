@@ -853,7 +853,24 @@ def relatorio_de_clientes(request):
             if comprador.telefone not in garcons:
                 garcons.append(comprador.telefone)
 
+    garcom_total = []
+    count_total_valor_garcom = 0  # total $ registrado por todos garçons
+
+    for garcom in garcons:
+        count_total_garcom = 0  # total $ registrado por cada garçom
+
+        for pedido in pedidos:
+            if pedido.comprador.telefone == garcom:
+                count_total_garcom = count_total_garcom + pedido.total
+
+        if count_total_garcom != 0:
+            garcom_total.append([garcom, count_total_garcom])
+            count_total_valor_garcom = count_total_valor_garcom + count_total_garcom
+
+    print(garcom_total)
+
     cliente_total = []
+    count_total_valor_cliente = 0
 
     for cliente in clientes:
         count_total_cliente = 0 #total $ consumido
@@ -869,9 +886,18 @@ def relatorio_de_clientes(request):
 
         if count_total_cliente !=0:
             cliente_total.append([cliente, count_total_cliente, data_ultima_visita.strftime('%d/%m/%Y')])
+            count_total_valor_cliente = count_total_valor_cliente + count_total_cliente
 
+    count_total_estabelecimento = count_total_valor_garcom + count_total_valor_cliente
+    porcent_garcom = count_total_valor_garcom / count_total_estabelecimento * 100
+    porcent_cliente = count_total_valor_cliente / count_total_estabelecimento * 100
 
-    return render(request, 'onshop_auto/relatorio_de_clientes.html', {'datas': data_filtro, 'clientes': cliente_total, 'garcons':garcons})
+    porcent_garcom = "%.2f" % (porcent_garcom)
+    porcent_cliente = "%.2f" % (porcent_cliente)
+
+    valor_total = [count_total_estabelecimento, count_total_valor_cliente, count_total_valor_garcom, porcent_cliente, porcent_garcom]
+    print(valor_total)
+    return render(request, 'onshop_auto/relatorio_de_clientes.html', {'datas': data_filtro, 'clientes': cliente_total, 'garcons':garcom_total, 'totais': valor_total})
 
 def sortThird(val):
     return val[3]

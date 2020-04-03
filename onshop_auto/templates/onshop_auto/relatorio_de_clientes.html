@@ -15,11 +15,51 @@
             {% if data_min is not None and data_min != '' and data_max is not None and data_max != ''%}
                 <span>Data de pesquisa: entre {{data_min}} e {{data_max}}</span>
             {% else %}
-                <span>Data de pesquisa: {{data_min}} </span>
+                <span>Período: {{data_min}} </span>
             {% endif %}
         {%endfor%}
     </div>
 
+    <h2>Arrecadação do Estabelecimento: R${{totais.0}}</h2>
+    <table class="table container clearfix col-md-6 configdiv">
+        <thead>
+            <tr>
+                <th scope="col">Total Cliente</th>
+                <th scope="col">Total Garçom</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td scope="row">R${{totais.1}}</td>
+                    <td scope="row">R${{totais.2}}</td>
+                </tr>
+                <tr>
+                    <td scope="row">{{totais.3}}%</td>
+                    <td scope="row">{{totais.4}}%</td>
+                </tr>
+        </tbody>
+    </table>
+
+
+    <h3>Garçons</h3>
+    <table class="table container clearfix col-md-6 configdiv">
+        <thead>
+            <tr>
+                <th scope="col">Garçom</th>
+                <th scope="col">Total (R$)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for garcom, count_total_garcom in garcons%}
+                <tr>
+                    <td scope="row">{{garcom}}</td>
+                    <td scope="row">{{count_total_garcom}}</td>
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+    <h3>Clientes</h3>
     <table class="table container clearfix col-md-6 configdiv">
         <thead>
             <tr>

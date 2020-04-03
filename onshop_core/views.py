@@ -178,6 +178,37 @@ def retirada(request): #View intermediária para setar a escolha de retirada loc
         retirada.pedido_set.clear() #Desacopla o objeto LocalRetiradaPedido do Pedido
         retirada.delete()
 
+    def PicPay:
+
+        urlCallBack = "https://seusite.com/notification.php"
+        urlReturn = "https://seusite.com/user"
+        x_picpay_token = "97ca34a3-3940-4d0c-b539-1000de999c9e"
+        x_seller_token = "88aa829c-742c-48b3-b974-05ef50668e37"
+
+        def requestPayment(pedido):
+
+            data = {
+            'referenceId': pedido.session_key,
+            'callbackUrl': urlCallBack,
+            'returnUrl': urlReturn,
+            'value': pedido.total,
+            'buyer': {
+                'firstName': pedido.comprador.nome,
+                'lastName': pedido.comprador.nome,
+                'document': '000.000.000-00',
+                'email': pedido.comprador.email,
+                'phone': pedido.comprador.telefone,}
+            }
+
+            headers = {'x-picpay-token': x-picpay-token}
+
+            r = requests.post('https://appws.picpay.com/ecommerce/public/payments', headers=headers, data=data)
+
+            return r
+
+        print(r.[])
+
+
     return redirect('onshop_core:contato')
 
 def contato(request):

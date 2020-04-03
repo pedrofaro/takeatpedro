@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.core.files.base import ContentFile
 from django.db import models
 from django.shortcuts import get_object_or_404
-from django.core.files.base import ContentFile
 
 from PIL import Image
 try:
@@ -11,7 +11,7 @@ try:
 except ImportError:
     from io import StringIO
 
-import qrcode #https://github.com/lincolnloop/python-qrcode
+#import qrcode #ra que quem
 
 # Create your models here.
 
